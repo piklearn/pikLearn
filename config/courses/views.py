@@ -5,10 +5,7 @@ from dal import autocomplete
 
 class CourseAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
-        # بررسی اینکه آیا کاربر وارد شده است
-        if not self.request.user.is_authenticated:
-            return Course.objects.none()
-
+        
         qs = Course.objects.all()  # به دست آوردن همه دوره‌ها
 
 
