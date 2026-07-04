@@ -25,8 +25,12 @@ SECRET_KEY = 'django-insecure-69-_=hqg&b@x(oev1!d!n)2shs$gu)rl5g9b2k09k0^9n#5!z(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '.onrender.com',
+    'piklearn.onrender.com',
+]
 
 # Application definition
 
