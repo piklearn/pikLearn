@@ -3,5 +3,7 @@ crispy-bootstrap5==2025.6
 Django==6.0.2
 django-autocomplete-light==3.12.1
 django-crispy-forms==2.5
+git-filter-repo==2.47.0
+pillow==12.3.0
 sqlparse==0.5.5
 tzdata==2025.3
