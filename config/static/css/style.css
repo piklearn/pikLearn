@@ -1450,16 +1450,6 @@ div.shadow>img {
   background: var(--surface) !important;
 }
 
-.feature-card::before {
-  content: '';
-  display: block;
-  width: 3rem;
-  height: 3rem;
-  margin: 0 auto .75rem;
-  border-radius: 50%;
-  background: rgba(var(--primary-rgb), .14);
-}
-
 .price {
   font-weight: 800;
   color: var(--primary);
