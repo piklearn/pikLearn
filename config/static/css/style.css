@@ -1859,3 +1859,7 @@ img {
     margin-inline: auto;
   }
 }
+
+.main-content {
+  margin-top: 5rem;
+}
