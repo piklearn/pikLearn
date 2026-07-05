@@ -1,0 +1,394 @@
+[
+  {
+    "model": "courses.category",
+    "pk": 1,
+    "fields": {
+      "name": "برنامه‌نویسی وب",
+      "description": "آموزش طراحی و توسعه وب سایت با استفاده از جدیدترین تکنولوژی‌ها",
+      "parent_category": null,
+      "icon": "bi-code-slash",
+      "slug": "web-development"
+    }
+  },
+  {
+    "model": "courses.category",
+    "pk": 2,
+    "fields": {
+      "name": "طراحی گرافیک",
+      "description": "آموزش طراحی گرافیک، تصویرسازی و ابزارهای طراحی",
+      "parent_category": null,
+      "icon": "bi-palette",
+      "slug": "graphic-design"
+    }
+  },
+  {
+    "model": "courses.category",
+    "pk": 3,
+    "fields": {
+      "name": "برنامه‌نویسی موبایل",
+      "description": "توسعه اپلیکیشن‌های موبایل برای اندروید و iOS",
+      "parent_category": null,
+      "icon": "bi-phone",
+      "slug": "mobile-development"
+    }
+  },
+  {
+    "model": "courses.category",
+    "pk": 4,
+    "fields": {
+      "name": "هوش مصنوعی",
+      "description": "یادگیری ماشین، یادگیری عمیق و پردازش زبان طبیعی",
+      "parent_category": null,
+      "icon": "bi-robot",
+      "slug": "artificial-intelligence"
+    }
+  },
+  {
+    "model": "courses.category",
+    "pk": 5,
+    "fields": {
+      "name": "پایتون",
+      "description": "برنامه‌نویسی با زبان پایتون از مبتدی تا پیشرفته",
+      "parent_category": null,
+      "icon": "bi-file-code",
+      "slug": "python"
+    }
+  },
+  {
+    "model": "courses.category",
+    "pk": 6,
+    "fields": {
+      "name": "جاوااسکریپت",
+      "description": "آموزش جاوااسکریپت و فریمورک‌های مرتبط",
+      "parent_category": null,
+      "icon": "bi-braces",
+      "slug": "javascript"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 1,
+    "fields": {
+      "title": "دوره جامع جنگو",
+      "slug": "django-comprehensive-course",
+      "thumbnail": "course_thumbnails/django.jpg",
+      "cover_image": "course_covers/django-cover.jpg",
+      "description": "در این دوره شما از صفر تا صد فریمورک جنگو را یاد خواهید گرفت. شامل مباحث مدل، ویو، تمپلیت، فرم‌ها، احراز هویت، REST API و استقرار پروژه",
+      "short_description": "آموزش کامل فریمورک جنگو از مبتدی تا پیشرفته",
+      "instructor": 1,
+      "category": 1,
+      "price": 500000,
+      "discount_price": 350000,
+      "duration": "108000.0",
+      "difficulty_level": "intermediate",
+      "language": "fa",
+      "has_certificate": true,
+      "certificate_text": "گواهی پایان دوره جنگو",
+      "created_date": "2026-01-15T10:00:00Z",
+      "updated_date": "2026-01-15T10:00:00Z",
+      "status": "published",
+      "views": 150,
+      "is_featured": true
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 2,
+    "fields": {
+      "title": "آموزش پایتون مقدماتی تا پیشرفته",
+      "slug": "python-beginner-to-advanced",
+      "thumbnail": "course_thumbnails/python.jpg",
+      "cover_image": "course_covers/python-cover.jpg",
+      "description": "این دوره مناسب افرادی است که هیچ آشنایی با برنامه‌نویسی ندارند و می‌خواهند با زبان پایتون شروع کنند. مباحث از متغیرها و شرط‌ها تا برنامه‌نویسی شی‌گرا و کتابخانه‌های معروف",
+      "short_description": "آموزش پایتون برای مبتدیان تا سطح پیشرفته",
+      "instructor": 1,
+      "category": 5,
+      "price": 350000,
+      "discount_price": null,
+      "duration": "162000.0",
+      "difficulty_level": "beginner",
+      "language": "fa",
+      "has_certificate": true,
+      "certificate_text": "گواهی پایان دوره پایتون",
+      "created_date": "2026-01-20T10:00:00Z",
+      "updated_date": "2026-01-20T10:00:00Z",
+      "status": "published",
+      "views": 200,
+      "is_featured": true
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 3,
+    "fields": {
+      "title": "طراحی رابط کاربری با Figma",
+      "slug": "ui-design-figma",
+      "thumbnail": "course_thumbnails/figma.jpg",
+      "cover_image": "course_covers/figma-cover.jpg",
+      "description": "در این دوره با ابزار قدرتمند Figma برای طراحی رابط کاربری آشنا می‌شوید. از اصول طراحی گرفته تا پروتوتایپ‌سازی و همکاری تیمی",
+      "short_description": "آموزش طراحی UI با Figma",
+      "instructor": 2,
+      "category": 2,
+      "price": 250000,
+      "discount_price": 180000,
+      "duration": "54000.0",
+      "difficulty_level": "beginner",
+      "language": "fa",
+      "has_certificate": false,
+      "certificate_text": null,
+      "created_date": "2026-02-01T10:00:00Z",
+      "updated_date": "2026-02-01T10:00:00Z",
+      "status": "published",
+      "views": 80,
+      "is_featured": false
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 4,
+    "fields": {
+      "title": "توسعه اپلیکیشن اندروید با Kotlin",
+      "slug": "android-kotlin-development",
+      "thumbnail": "course_thumbnails/android.jpg",
+      "cover_image": "course_covers/android-cover.jpg",
+      "description": "آموزش کامل توسعه اپلیکیشن‌های اندروید با زبان کاتلین. شامل رابط کاربری، مدیریت داده، شبکه، و انتشار در Google Play",
+      "short_description": "توسعه اپلیکیشن اندروید با کاتلین",
+      "instructor": 3,
+      "category": 3,
+      "price": 600000,
+      "discount_price": 420000,
+      "duration": "144000.0",
+      "difficulty_level": "advanced",
+      "language": "fa",
+      "has_certificate": true,
+      "certificate_text": "گواهی توسعه اندروید با کاتلین",
+      "created_date": "2026-02-10T10:00:00Z",
+      "updated_date": "2026-02-10T10:00:00Z",
+      "status": "published",
+      "views": 95,
+      "is_featured": true
+    }
+  },
+  {
+    "model": "courses.courserequirement",
+    "pk": 1,
+    "fields": {
+      "course": 1,
+      "text": "آشنایی مقدماتی با پایتون",
+      "order": 1
+    }
+  },
+  {
+    "model": "courses.courserequirement",
+    "pk": 2,
+    "fields": {
+      "course": 1,
+      "text": "آشنایی با HTML و CSS",
+      "order": 2
+    }
+  },
+  {
+    "model": "courses.courserequirement",
+    "pk": 3,
+    "fields": {
+      "course": 1,
+      "text": "آشنایی با مفاهیم پایگاه داده",
+      "order": 3
+    }
+  },
+  {
+    "model": "courses.courserequirement",
+    "pk": 4,
+    "fields": {
+      "course": 2,
+      "text": "هیچ پیش‌نیازی نیاز نیست",
+      "order": 1
+    }
+  },
+  {
+    "model": "courses.learnpoint",
+    "pk": 1,
+    "fields": {
+      "course": 1,
+      "text": "مدل‌سازی داده با Django ORM",
+      "icon": "bi-check-circle-fill",
+      "order": 1
+    }
+  },
+  {
+    "model": "courses.learnpoint",
+    "pk": 2,
+    "fields": {
+      "course": 1,
+      "text": "ساخت ویوهای مبتنی بر کلاس",
+      "icon": "bi-check-circle-fill",
+      "order": 2
+    }
+  },
+  {
+    "model": "courses.learnpoint",
+    "pk": 3,
+    "fields": {
+      "course": 1,
+      "text": "ایجاد REST API با DRF",
+      "icon": "bi-check-circle-fill",
+      "order": 3
+    }
+  },
+  {
+    "model": "courses.chapter",
+    "pk": 1,
+    "fields": {
+      "course": 1,
+      "title": "مقدمه و نصب",
+      "description": "آشنایی با جنگو و نصب آن",
+      "order": 1,
+      "is_free": true
+    }
+  },
+  {
+    "model": "courses.chapter",
+    "pk": 2,
+    "fields": {
+      "course": 1,
+      "title": "مدل‌ها و پایگاه داده",
+      "description": "کار با مدل‌ها و ORM",
+      "order": 2,
+      "is_free": false
+    }
+  },
+  {
+    "model": "courses.chapter",
+    "pk": 3,
+    "fields": {
+      "course": 2,
+      "title": "پایه و اصول",
+      "description": "متغیرها، شرط‌ها و حلقه‌ها",
+      "order": 1,
+      "is_free": true
+    }
+  },
+  {
+    "model": "courses.video",
+    "pk": 1,
+    "fields": {
+      "chapter": 1,
+      "title": "معرفی دوره",
+      "description": "معرفی کامل دوره جنگو",
+      "url": "https://www.youtube.com/watch?v=django-intro",
+      "duration": "600.0",
+      "order": 1,
+      "is_free_preview": true,
+      "upload_date": "2026-01-15T10:00:00Z",
+      "attachment": null,
+      "attachment_name": null,
+      "is_downloadable": false
+    }
+  },
+  {
+    "model": "courses.video",
+    "pk": 2,
+    "fields": {
+      "chapter": 1,
+      "title": "نصب و راه‌اندازی",
+      "description": "نصب پایتون و جنگو",
+      "url": "https://www.youtube.com/watch?v=django-install",
+      "duration": "900.0",
+      "order": 2,
+      "is_free_preview": true,
+      "upload_date": "2026-01-15T10:00:00Z",
+      "attachment": null,
+      "attachment_name": null,
+      "is_downloadable": false
+    }
+  },
+  {
+    "model": "courses.video",
+    "pk": 3,
+    "fields": {
+      "chapter": 2,
+      "title": "ساخت مدل اول",
+      "description": "ساخت اولین مدل در جنگو",
+      "url": "https://www.youtube.com/watch?v=django-model",
+      "duration": "1200.0",
+      "order": 1,
+      "is_free_preview": false,
+      "upload_date": "2026-01-20T10:00:00Z",
+      "attachment": null,
+      "attachment_name": null,
+      "is_downloadable": true
+    }
+  },
+  {
+    "model": "courses.coursereview",
+    "pk": 1,
+    "fields": {
+      "course": 1,
+      "user": 2,
+      "rating": 5,
+      "comment": "عالی بود! بهترین دوره جنگویی که دیدم",
+      "created_date": "2026-02-01T10:00:00Z",
+      "is_approved": true
+    }
+  },
+  {
+    "model": "courses.coursereview",
+    "pk": 2,
+    "fields": {
+      "course": 1,
+      "user": 3,
+      "rating": 4,
+      "comment": "دوره خوبی بود اما کاش بیشتر روی API تمرکز می‌کرد",
+      "created_date": "2026-02-05T10:00:00Z",
+      "is_approved": true
+    }
+  },
+  {
+    "model": "courses.coursefaq",
+    "pk": 1,
+    "fields": {
+      "course": 1,
+      "question": "آیا به دانش قبلی نیاز دارم؟",
+      "answer": "تنها آشنایی مقدماتی با پایتون کافی است",
+      "order": 1
+    }
+  },
+  {
+    "model": "courses.coursefaq",
+    "pk": 2,
+    "fields": {
+      "course": 1,
+      "question": "آیا گواهی پایان دوره ارائه می‌شود؟",
+      "answer": "بله، پس از اتمام دوره گواهی معتبر دریافت می‌کنید",
+      "order": 2
+    }
+  },
+  {
+    "model": "courses.courseresource",
+    "pk": 1,
+    "fields": {
+      "course": 1,
+      "title": "کدهای نهایی پروژه",
+      "description": "کد کامل پروژه بعد از اتمام دوره",
+      "file": "course_resources/django-final.zip",
+      "link": null,
+      "resource_type": "zip",
+      "is_free": false,
+      "order": 1
+    }
+  },
+  {
+    "model": "courses.courseresource",
+    "pk": 2,
+    "fields": {
+      "course": 1,
+      "title": "نکات کلیدی جنگو",
+      "description": "PDF نکات کلیدی",
+      "file": "course_resources/django-tips.pdf",
+      "link": null,
+      "resource_type": "pdf",
+      "is_free": true,
+      "order": 2
+    }
+  }
+]
