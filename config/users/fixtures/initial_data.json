@@ -1,0 +1,92 @@
+[
+  {
+    "model": "users.customuser",
+    "pk": 1,
+    "fields": {
+      "username": "admin",
+      "password": "pbkdf2_sha256$260000$8RkLtEwM9bVJ$vZLNk7hDvFcKw4/ejlSfP6t0Cjq3YjUaVL9tQnOzzkU=",
+      "email": "admin@example.com",
+      "first_name": "مدیر",
+      "last_name": "سیستم",
+      "is_active": true,
+      "is_staff": true,
+      "is_superuser": true,
+      "role": "admin",
+      "registration_date": "2026-01-01T08:00:00Z",
+      "last_login": "2026-01-01T08:00:00Z",
+      "status": "active"
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 2,
+    "fields": {
+      "username": "instructor1",
+      "password": "pbkdf2_sha256$260000$8RkLtEwM9bVJ$vZLNk7hDvFcKw4/ejlSfP6t0Cjq3YjUaVL9tQnOzzkU=",
+      "email": "instructor1@example.com",
+      "first_name": "مدرس",
+      "last_name": "اول",
+      "is_active": true,
+      "is_staff": false,
+      "is_superuser": false,
+      "role": "instructor",
+      "registration_date": "2026-01-01T08:00:00Z",
+      "last_login": "2026-01-01T08:00:00Z",
+      "status": "active"
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 3,
+    "fields": {
+      "username": "instructor2",
+      "password": "pbkdf2_sha256$260000$8RkLtEw9bVJ$vZLNk7hDvFcKw4/ejlSfP6t0Cjq3YjUaVL9tQnOzzkU=",
+      "email": "instructor2@example.com",
+      "first_name": "مدرس",
+      "last_name": "دوم",
+      "is_active": true,
+      "is_staff": false,
+      "is_superuser": false,
+      "role": "instructor",
+      "registration_date": "2026-01-01T08:00:00Z",
+      "last_login": "2026-01-01T08:00:00Z",
+      "status": "active"
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 4,
+    "fields": {
+      "username": "student1",
+      "password": "pbkdf2_sha256$260000$8RkLtEwM9bVJ$vZLNk7hDvFcKw4/ejlSfP6t0Cjq3YjUaVL9tQnOzzkU=",
+      "email": "student1@example.com",
+      "first_name": "دانشجو",
+      "last_name": "اول",
+      "is_active": true,
+      "is_staff": false,
+      "is_superuser": false,
+      "role": "student",
+      "registration_date": "2026-01-01T08:00:00Z",
+      "last_login": "2026-01-01T08:00:00Z",
+      "status": "active"
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 5,
+    "fields": {
+      "username": "student2",
+      "password": "pbkdf2_sha256$260000$8RkLtEwM9bVJ$vZLNk7hDvFcKw4/ejlSfP6t0Cjq3YjUaVL9tQnOzzkU=",
+      "email": "student2@example.com",
+      "first_name": "دانشجو",
+      "last_name": "دوم",
+      "is_active": true,
+      "is_staff": false,
+      "is_superuser": false,
+      "role": "student",
+      "registration_date": "2026-01-01T08:00:00Z",
+      "last_login": "2026-01-01T08:00:00Z",
+      "status": "active"
+    }
+  }
+]

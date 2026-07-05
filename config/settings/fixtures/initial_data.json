@@ -1,0 +1,212 @@
+[
+  {
+    "model": "settings.sitesettings",
+    "pk": 1,
+    "fields": {
+      "setting_name": "تنظیمات اصلی سایت",
+      "setting_value": "{\"version\": \"1.0\", \"maintenance_mode\": false}",
+      "site_name": "پیک لرن",
+      "site_description": "بزرگترین پلتفرم آموزش آنلاین برنامه‌نویسی و طراحی",
+      "site_logo": "site_logos/logo.png",
+      "site_icon": "site_icons/icon.png",
+      "site_favicon": "favicons/favicon.ico",
+      "primary_color": "#FFD54A",
+      "secondary_color": "#2563EB",
+      "meta_title": "پیک لرن - آموزش آنلاین برنامه‌نویسی و طراحی",
+      "meta_description": "آموزش جامع برنامه‌نویسی، طراحی وب، توسعه موبایل و هوش مصنوعی با بهترین مدرسان",
+      "meta_keywords": "آموزش برنامه‌نویسی, آموزش طراحی, دوره آنلاین, پایتون, جنگو, جاوااسکریپت",
+      "meta_author": "تیم پیک لرن",
+      "social_instagram": "https://instagram.com/piklearn",
+      "social_telegram": "https://t.me/piklearn",
+      "social_twitter": "https://twitter.com/piklearn",
+      "social_linkedin": "https://linkedin.com/company/piklearn",
+      "social_youtube": "https://youtube.com/@piklearn",
+      "contact_email": "info@piklearn.com",
+      "contact_phone": "021-12345678",
+      "address": "تهران، خیابان ولیعصر، پلاک ۱۲۳، طبقه ۴",
+      "is_active": true,
+      "created_at": "2026-01-01T08:00:00Z",
+      "updated_at": "2026-01-01T08:00:00Z"
+    }
+  },
+  {
+    "model": "settings.navbaroption",
+    "pk": 1,
+    "fields": {
+      "name": "خانه",
+      "link": "/",
+      "icon": "bi-house",
+      "order": 1,
+      "is_active": true,
+      "open_in_new_tab": false
+    }
+  },
+  {
+    "model": "settings.navbaroption",
+    "pk": 2,
+    "fields": {
+      "name": "دوره‌ها",
+      "link": "/courses/",
+      "icon": "bi-book",
+      "order": 2,
+      "is_active": true,
+      "open_in_new_tab": false
+    }
+  },
+  {
+    "model": "settings.navbaroption",
+    "pk": 3,
+    "fields": {
+      "name": "دسته‌بندی‌ها",
+      "link": "/categories/",
+      "icon": "bi-grid",
+      "order": 3,
+      "is_active": true,
+      "open_in_new_tab": false
+    }
+  },
+  {
+    "model": "settings.navbaroption",
+    "pk": 4,
+    "fields": {
+      "name": "مقالات",
+      "link": "/blog/",
+      "icon": "bi-newspaper",
+      "order": 4,
+      "is_active": true,
+      "open_in_new_tab": false
+    }
+  },
+  {
+    "model": "settings.navbaroption",
+    "pk": 5,
+    "fields": {
+      "name": "درباره ما",
+      "link": "/about/",
+      "icon": "bi-info-circle",
+      "order": 5,
+      "is_active": true,
+      "open_in_new_tab": false
+    }
+  },
+  {
+    "model": "settings.navbaroption",
+    "pk": 6,
+    "fields": {
+      "name": "تماس با ما",
+      "link": "/contact/",
+      "icon": "bi-envelope",
+      "order": 6,
+      "is_active": true,
+      "open_in_new_tab": false
+    }
+  },
+  {
+    "model": "settings.navbaroption",
+    "pk": 7,
+    "fields": {
+      "name": "ورود / ثبت‌نام",
+      "link": "/accounts/login/",
+      "icon": "bi-person",
+      "order": 7,
+      "is_active": true,
+      "open_in_new_tab": false
+    }
+  },
+  {
+    "model": "settings.navbaroption",
+    "pk": 8,
+    "fields": {
+      "name": "وبلاگ",
+      "link": "https://blog.piklearn.com",
+      "icon": "bi-pencil",
+      "order": 8,
+      "is_active": false,
+      "open_in_new_tab": true
+    }
+  },
+  {
+    "model": "settings.navbaroption",
+    "pk": 9,
+    "fields": {
+      "name": "پشتیبانی",
+      "link": "/support/",
+      "icon": "bi-chat",
+      "order": 9,
+      "is_active": false,
+      "open_in_new_tab": false
+    }
+  },
+  {
+    "model": "settings.navbaroption",
+    "pk": 10,
+    "fields": {
+      "name": "گواهی‌ها",
+      "link": "/certificates/",
+      "icon": "bi-award",
+      "order": 10,
+      "is_active": false,
+      "open_in_new_tab": false
+    }
+  },
+  {
+    "model": "settings.navbaroption",
+    "pk": 11,
+    "fields": {
+      "name": "تخفیف‌ها",
+      "link": "/discounts/",
+      "icon": "bi-tag",
+      "order": 11,
+      "is_active": false,
+      "open_in_new_tab": false
+    }
+  },
+  {
+    "model": "settings.navbaroption",
+    "pk": 12,
+    "fields": {
+      "name": "آموزش رایگان",
+      "link": "/free-courses/",
+      "icon": "bi-gift",
+      "order": 12,
+      "is_active": false,
+      "open_in_new_tab": false
+    }
+  },
+  {
+    "model": "settings.navbaroption",
+    "pk": 13,
+    "fields": {
+      "name": "پروژه‌ها",
+      "link": "/projects/",
+      "icon": "bi-folder",
+      "order": 13,
+      "is_active": false,
+      "open_in_new_tab": false
+    }
+  },
+  {
+    "model": "settings.navbaroption",
+    "pk": 14,
+    "fields": {
+      "name": "استخدام",
+      "link": "/jobs/",
+      "icon": "bi-briefcase",
+      "order": 14,
+      "is_active": false,
+      "open_in_new_tab": false
+    }
+  },
+  {
+    "model": "settings.navbaroption",
+    "pk": 15,
+    "fields": {
+      "name": "دانلود اپلیکیشن",
+      "link": "/download-app/",
+      "icon": "bi-download",
+      "order": 15,
+      "is_active": false,
+      "open_in_new_tab": true
+    }
+  }
+]

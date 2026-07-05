@@ -105,18 +105,21 @@
 
         <!-- Navigation -->
         <div class="collapse navbar-collapse" id="navbarGlass">
-          <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-            {% for option in navbar_options %}
-            <li class="nav-item">
-              <a class="nav-link glass-nav-link {% if option.active %}active{% endif %}" href="{{ option.link }}" {% if option.open_in_new_tab %}target="_blank" {% endif %}>
-                {% if option.icon %}
-                <i class="bi {{ option.icon }} me-1"></i>
-                {% endif %}
-                {{ option.name }}
-              </a>
-            </li>
-            {% endfor %} 
-          </ul>
+  <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+    {% get_navbar_options as navbar_options %}
+    {% for option in navbar_options %}
+    <li class="nav-item">
+      <a class="nav-link glass-nav-link {% if option.active %}active{% endif %}" 
+         href="{{ option.link }}" 
+         {% if option.open_in_new_tab %}target="_blank"{% endif %}>
+        {% if option.icon %}
+        <i class="bi {{ option.icon }} me-1"></i>
+        {% endif %}
+        {{ option.name }}
+      </a>
+    </li>
+    {% endfor %} 
+  </ul>
 
           <!-- Right Side Controls -->
           <div class="d-flex align-items-center gap-2 gap-lg-3">
