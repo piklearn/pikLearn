@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -27,10 +27,19 @@ urlpatterns = [
     path('', include('main.urls'), name='main'),
     path('courses/', include(('courses.urls', 'courses'), namespace='courses'),),
     path('accounts/', include(('users.urls', 'accounts'), namespace='accounts'),),
-
+    path('reviews/', include(('reviews.urls', 'reviews'), namespace='reviews')),
+    path('blog/', include(('blog.urls', 'blog'), namespace='blog'),),
+    
     path('<slug:slug>/', page_views.page_detail, name='page_detail'),
 
 ] 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+if settings.DEBUG:
+    import debug_toolbar
+
+    urlpatterns += [
+        re_path(r'^__debug__/', include(debug_toolbar.urls)),
+    ]

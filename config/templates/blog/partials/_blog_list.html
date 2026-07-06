@@ -1,0 +1,14 @@
+{% load blog_tags %}
+
+<div class="row g-4">
+    {% for blog in blogs %}
+        {% blog_card blog %}
+    {% empty %}
+        <div class="col-12">
+            <div class="empty-state">
+                <i class="bi bi-newspaper"></i>
+                <p>هیچ مقاله‌ای یافت نشد.</p>
+            </div>
+        </div>
+    {% endfor %}
+</div>

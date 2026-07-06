@@ -25,12 +25,8 @@ SECRET_KEY = 'django-insecure-69-_=hqg&b@x(oev1!d!n)2shs$gu)rl5g9b2k09k0^9n#5!z(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    '.onrender.com',
-    'piklearn.onrender.com',
-]
+ALLOWED_HOSTS = []
+
 
 # Application definition
 
@@ -55,7 +51,6 @@ INSTALLED_APPS = [
     'sections',
     'pages',
     'blog',
-    'debug_toolbar',
     'crispy_forms',
     "crispy_bootstrap5",
 ]
@@ -68,7 +63,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -88,10 +82,6 @@ TEMPLATES = [
             ],
         },
     },
-]
-
-INTERNAL_IPS = [
-    '127.0.0.1',
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
@@ -142,12 +132,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = "/var/www/pklearn.com/static/"
 
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
+    "/var/www/static/",
 ]
 
 MEDIA_URL = "/media/"

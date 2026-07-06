@@ -320,30 +320,6 @@
     }
   },
   {
-    "model": "courses.coursereview",
-    "pk": 1,
-    "fields": {
-      "course": 1,
-      "user": 2,
-      "rating": 5,
-      "comment": "عالی بود! بهترین دوره جنگویی که دیدم",
-      "created_date": "2026-02-01T10:00:00Z",
-      "is_approved": true
-    }
-  },
-  {
-    "model": "courses.coursereview",
-    "pk": 2,
-    "fields": {
-      "course": 1,
-      "user": 3,
-      "rating": 4,
-      "comment": "دوره خوبی بود اما کاش بیشتر روی API تمرکز می‌کرد",
-      "created_date": "2026-02-05T10:00:00Z",
-      "is_approved": true
-    }
-  },
-  {
     "model": "courses.coursefaq",
     "pk": 1,
     "fields": {

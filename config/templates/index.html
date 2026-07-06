@@ -1,5 +1,6 @@
 {% extends '_base.html' %}
 {% load static %}
+{% load blog_tags %}
 
 {% block title %}صفحه اصلی{% endblock title %}
 
@@ -410,124 +411,9 @@
 </section>
 
 <!-- Articles Section -->
-<section>
-<div class="d-flex justify-content-between align-items-center mb-4">
-  <h2 class="section-title mb-5 fw-bold">جدیدترین مقاله ها</h2>
-  <a href="#" class="btn btn-dark">مشاهده همه</a>
-</div>
-<div class="row g-4">
 
-  <!-- Article 1 -->
-  <div class="col-lg-3 col-md-6">
+    {% recent_blogs 4 %}
 
-    <div class="card article-card h-100 p-3 bg-white">
-      <a href="#" class="text-decoration-none text-dark">
-        <img src="https://thumbs.dreamstime.com/z/dumbbell-rack-close-up-gym-sport-150444617.jpg?ct=jpeg" class="w-100 mb-3 article-img">
-
-        <div class="d-flex justify-content-between small mb-2">
-          <div class="text-muted">📅 ۱۰ خرداد ۱۴۰۵</div>
-          <div class="text-success">الگوریتم</div>
-        </div>
-
-        <h6 class="fw-bold">تحلیل الگوریتم Randomized SAT</h6>
-
-        <div class="text-muted small mb-3">
-          بررسی کامل الگوریتم‌های تصادفی برای حل مسائل NP-Complete و تحلیل احتمال موفقیت آن‌ها.
-        </div>
-
-        <hr>
-
-        <div class="d-flex justify-content-between align-items-center">
-          <div class="text-muted small">⏱ ۱۲ دقیقه</div>
-          <span class="badge bg-info rounded-pill px-3 py-2">مطالعه</span>
-        </div>
-      </a>
-    </div>
-  </div>
-
-  <!-- Article 2 -->
-  <div class="col-lg-3 col-md-6">
-    <div class="card article-card h-100 p-3 bg-white">
-      <a href="#" class="text-decoration-none text-dark">
-        <img src="https://thumbs.dreamstime.com/z/adventure-sport-extreme-mountain-bike-athlete-man-riding-outdoors-lifestyle-trail-30470085.jpg?ct=jpeg" class="w-100 mb-3 article-img">
-
-        <div class="d-flex justify-content-between small mb-2">
-          <div class="text-muted">📅 ۲۵ اردیبهشت ۱۴۰۵</div>
-          <div class="text-primary">سیستم‌عامل</div>
-        </div>
-
-        <h6 class="fw-bold">قفل Per User در سیستم‌های همزمان</h6>
-
-        <div class="text-muted small mb-3">
-          پیاده‌سازی قفل سطح کاربر در برنامه‌های چندنخی و جلوگیری از race condition.
-        </div>
-
-        <hr>
-
-        <div class="d-flex justify-content-between align-items-center">
-          <div class="text-muted small">⏱ ۸ دقیقه</div>
-          <span class="badge bg-info rounded-pill px-3 py-2">مطالعه</span>
-        </div>
-      </a>
-    </div>
-  </div>
-
-  <!-- Article 3 -->
-  <div class="col-lg-3 col-md-6">
-    <div class="card article-card h-100 p-3 bg-white">
-      <a href="#" class="text-decoration-none text-dark">
-        <img src="https://thumbs.dreamstime.com/z/indoor-bycicle-cycling-gym-16587500.jpg?ct=jpeg" class="w-100 mb-3 article-img">
-
-        <div class="d-flex justify-content-between small mb-2">
-          <div class="text-muted">📅 ۵ خرداد ۱۴۰۵</div>
-          <div class="text-danger">Backend</div>
-        </div>
-
-        <h6 class="fw-bold">مقایسه REST و GraphQL</h6>
-
-        <div class="text-muted small mb-3">
-          بررسی معماری REST در مقابل GraphQL و انتخاب مناسب برای پروژه‌های مقیاس‌پذیر.
-        </div>
-
-        <hr>
-
-        <div class="d-flex justify-content-between align-items-center">
-          <div class="text-muted small">⏱ ۱۵ دقیقه</div>
-          <span class="badge bg-info rounded-pill px-3 py-2">مطالعه</span>
-        </div>
-      </a>
-    </div>
-  </div>
-
-  <!-- Article 4 -->
-  <div class="col-lg-3 col-md-6">
-    <div class="card article-card h-100 p-3 bg-white">
-      <a href="#" class="text-decoration-none text-dark">
-        <img src="https://thumbs.dreamstime.com/z/bmx-biker-27951084.jpg?ct=jpeg" class="w-100 mb-3 article-img">
-
-        <div class="d-flex justify-content-between small mb-2">
-          <div class="text-muted">📅 ۱۸ خرداد ۱۴۰۵</div>
-          <div class="text-warning">کامپایلر</div>
-        </div>
-
-        <h6 class="fw-bold">مراحل ساخت یک کامپایلر ساده</h6>
-
-        <div class="text-muted small mb-3">
-          از Lexer و Parser تا تولید کد نهایی؛ مسیر کامل ساخت یک کامپایلر کوچک.
-        </div>
-
-        <hr>
-
-        <div class="d-flex justify-content-between align-items-center">
-          <div class="text-muted small">⏱ ۲۰ دقیقه</div>
-          <span class="badge bg-info rounded-pill px-3 py-2">مطالعه</span>
-        </div>
-      </a>
-    </div>
-  </div>
-
-</div>
-</section>
 
 <!-- ================= Features Section ================= -->
 <section class="py-5">

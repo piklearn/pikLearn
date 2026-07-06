@@ -1,0 +1,17 @@
+<div class="sidebar-card">
+    <h5 class="sidebar-title">
+        <i class="bi bi-folder-fill"></i> {{ title }}
+    </h5>
+    <ul class="sidebar-category-list">
+        {% for category in categories %}
+            <li>
+                <a href="{{ category.get_absolute_url }}">
+                    <span>{{ category.title }}</span>
+                    <span class="count">{{ category.post_count }}</span>
+                </a>
+            </li>
+        {% empty %}
+            <li class="text-muted small">دسته‌بندی وجود ندارد</li>
+        {% endfor %}
+    </ul>
+</div>

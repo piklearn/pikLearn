@@ -1,0 +1,87 @@
+{% extends "_base.html" %}
+{% load static %}
+{% load blog_tags %}
+
+{% block title %}وبلاگ | پیک لرن{% endblock title %}
+
+{% block extra_link %}
+    <link rel="stylesheet" href="{% static 'css/detail.css' %}">
+{% endblock extra_link %}
+
+{% block meta %}
+    <meta name="description" content="مقالات آموزشی پیک لرن در زمینه برنامه‌نویسی، طراحی و هوش مصنوعی">
+{% endblock meta %}
+
+{% block main %}
+<!-- ============================================
+     BLOG LIST HERO
+     ============================================ -->
+<section class="blog-hero">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <h1 class="blog-title">وبلاگ پیک لرن</h1>
+                <p class="text-muted">جدیدترین مقالات آموزشی در زمینه برنامه‌نویسی، طراحی و فناوری</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================
+     BLOG LIST CONTENT
+     ============================================ -->
+<section class="blog-main">
+    <div class="container">
+        <div class="row g-4">
+
+            <!-- ===== LEFT: Blog Posts ===== -->
+            <div class="col-lg-8">
+                {% if blogs %}
+                    <div class="row g-4">
+                        {% blog_list blogs %}
+                    </div>
+
+                    <!-- Pagination -->
+                    {% if is_paginated %}
+                        <nav aria-label="صفحه‌بندی" class="mt-4">
+                            <ul class="pagination justify-content-center">
+                                {% if page_obj.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">قبلی</a>
+                                    </li>
+                                {% endif %}
+
+                                {% for num in page_obj.paginator.page_range %}
+                                    {% if page_obj.number == num %}
+                                        <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if page_obj.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">بعدی</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    {% endif %}
+
+                {% else %}
+                    <div class="empty-state">
+                        <i class="bi bi-newspaper"></i>
+                        <p>هیچ مقاله‌ای یافت نشد.</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- ===== RIGHT: Sidebar ===== -->
+            <div class="col-lg-4">
+                {% blog_sidebar %}
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endblock main %}

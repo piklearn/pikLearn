@@ -1,0 +1,59 @@
+{% load static %}
+{% load blog_tags %}
+
+<div class="col">
+    <div class="card article-card h-100">
+        <a href="{{ blog.get_absolute_url }}" class="text-decoration-none text-dark">
+            <!-- تصویر مقاله -->
+            {% if blog.image %}
+                <img src="{{ blog.image.url }}" alt="{{ blog.title }}" class="w-100 article-img" loading="lazy">
+            {% else %}
+                <img src="{% static 'img/blog-placeholder.jpg' %}" alt="{{ blog.title }}" class="w-100 article-img" loading="lazy">
+            {% endif %}
+
+            <!-- متا اطلاعات -->
+            <div class="card-body">
+                <div class="d-flex justify-content-between small mb-2">
+                    <div class="text-muted">
+                        <i class="bi bi-calendar3"></i>
+                        {{ blog.published_at|date:"Y/m/d" }}
+                    </div>
+                    {% if blog.category %}
+                        <a href="{{ blog.category.get_absolute_url }}" class="text-success text-decoration-none">
+                            <i class="bi bi-folder"></i>
+                            {{ blog.category.title }}
+                        </a>
+                    {% endif %}
+                </div>
+
+                <!-- عنوان -->
+                <h6 class="fw-bold mb-2">{{ blog.title }}</h6>
+
+                <!-- توضیح کوتاه -->
+                <p class="text-muted small mb-3">
+                    {{ blog.short_description|truncate_persian:120 }}
+                </p>
+
+                <hr>
+
+                <!-- فوتر کارت -->
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="text-muted small">
+                        <i class="bi bi-clock"></i>
+                        {{ blog.reading_time_minutes }} دقیقه مطالعه
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        {% if blog.is_featured %}
+                            <span class="badge bg-warning rounded-pill px-3 py-2 text-dark">
+                                <i class="bi bi-star-fill"></i> ویژه
+                            </span>
+                        {% endif %}
+                        <span class="badge bg-primary rounded-pill px-3 py-2">
+                            <i class="bi bi-eye"></i> {{ blog.view_count }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>

@@ -1,0 +1,20 @@
+<div class="sidebar-card">
+    <h5 class="sidebar-title">
+        <i class="bi bi-folder-fill"></i> {{ title }}
+    </h5>
+    <ul class="sidebar-category-list">
+        {% for post in blogs %}
+            <li>
+                <a href="{{ post.get_absolute_url }}">
+                    <span>{{ post.title|truncatechars:35 }}</span>
+                    <span class="count">{{ post.published_at|date:"Y/m/d" }}</span>
+                </a>
+            </li>
+        {% empty %}
+            <li class="text-muted small text-center py-2">
+                <i class="bi bi-inbox d-block mb-1" style="font-size: 1.2rem; opacity: 0.3;"></i>
+                هیچ مقاله مرتبطی وجود ندارد
+            </li>
+        {% endfor %}
+    </ul>
+</div>

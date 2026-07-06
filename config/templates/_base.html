@@ -28,7 +28,8 @@
   {% if site_settings and site_settings.meta_author %}
   <meta name="author" content="{{ site_settings.meta_author }}" />
   {% endif %}
-
+  {% block meta %}
+{% endblock meta %}
   <!-- Favicon -->
   {% if site_settings and site_settings.site_favicon %}
   <link rel="icon" type="image/x-icon" href="{{ site_settings.site_favicon.url }}" />
@@ -75,6 +76,7 @@
   </style>
   {% endif %}
   {% block extra_css %}{% endblock extra_css %}
+  {% block extra_link %}{% endblock extra_link %}
   <!-- Loaded eagerly (no defer) so the saved theme is applied before first paint -->
   <script src="{% static 'js/theme.js' %}"></script>
   <link rel="stylesheet" href="{% static 'css/style.css' %}" />

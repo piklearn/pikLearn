@@ -65,6 +65,11 @@ class ReviewForm(forms.ModelForm):
         content_type_str = cleaned_data.get('content_type')
         object_id = cleaned_data.get('object_id')
         rating = cleaned_data.get('rating')
+        comment = cleaned_data.get('comment', '').strip()
+        
+        # اعتبارسنجی متن نظر
+        if comment and len(comment) < 3:
+            self.add_error('comment', 'متن نظر خیلی کوتاه است.')
         
         # اعتبارسنجی content_type
         if content_type_str:
@@ -80,13 +85,14 @@ class ReviewForm(forms.ModelForm):
             if rating is None or rating == '':
                 self.add_error('rating', 'امتیاز برای دوره‌ها الزامی است.')
         
-        # بررسی نظر تکراری
+        # بررسی نظر تکراری (فقط برای نظرات اصلی)
         if self.user and content_type_str and object_id:
             content_type = cleaned_data.get('content_type')
             if Review.objects.filter(
                 user=self.user,
                 content_type=content_type,
-                object_id=object_id
+                object_id=object_id,
+                parent__isnull=True
             ).exists():
                 raise forms.ValidationError('شما قبلاً برای این محتوا نظر داده‌اید.')
         
@@ -103,38 +109,7 @@ class ReviewForm(forms.ModelForm):
         if self.content_object:
             instance.content_object = self.content_object
         
-        # تنظیم وضعیت تایید (در صورت نیاز)
-        # instance.is_approved = False  # اگر نیاز به تایید دارد
-        
         if commit:
             instance.save()
         
         return instance
-
-
-class CourseReviewForm(ReviewForm):
-    """فرم مخصوص دوره‌ها (برای سازگاری با عقب)"""
-    
-    class Meta(ReviewForm.Meta):
-        pass
-    
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # برای دوره‌ها، امتیاز الزامی است
-        self.fields['rating'].required = True
-
-
-class BlogReviewForm(ReviewForm):
-    """فرم مخصوص بلاگ"""
-    
-    class Meta(ReviewForm.Meta):
-        pass
-    
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # برای بلاگ، امتیاز اختیاری است و فیلد rating را حذف نمی‌کنیم
-        self.fields['rating'].required = False
-        self.fields['rating'].widget = forms.Select(
-            attrs={'class': 'form-select'},
-            choices=[('', 'بدون امتیاز')] + [(i, i) for i in range(1, 6)]
-        )

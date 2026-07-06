@@ -8,13 +8,16 @@ from django.views.decorators.http import require_POST
 from django.utils.decorators import method_decorator
 from django.contrib import messages
 from dal import autocomplete
-from courses.models import Course, Chapter, Video, CourseReview, CourseFAQ, CourseResource, CourseEnrollment, Wishlist
+from courses.models import Course,Category, Chapter, Video, CourseFAQ, CourseResource, CourseEnrollment, Wishlist
 from courses.forms import CourseReviewForm
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.http import Http404
+import json
+from django.contrib.contenttypes.models import ContentType
+from reviews.models import Review
 class CourseDetailView(DetailView):
     model = Course
     template_name = 'courses/detail.html'
@@ -58,7 +61,7 @@ class CourseDetailView(DetailView):
         context['resources'] = course.resources.all()
         
         # Get reviews with pagination
-        reviews = course.course_reviews.filter(is_approved=True)
+        reviews = course.get_reviews()
         paginator = Paginator(reviews, 5)
         page_number = self.request.GET.get('page')
         context['reviews'] = paginator.get_page(page_number)
@@ -182,27 +185,133 @@ def enroll_course(request, course_id):
         return JsonResponse({'success': False, 'message': 'شما قبلاً در این دوره ثبت‌نام کرده‌اید.'})
 
 
+ #============================================
+# لایک کردن نظر
+# ============================================
 @require_POST
 def review_like(request):
+    """لایک یا آنلایک کردن یک نظر"""
     if not request.user.is_authenticated:
-        return JsonResponse({'success': False, 'message': 'لطفاً وارد شوید.'}, status=401)
+        return JsonResponse(
+            {'success': False, 'message': 'لطفاً وارد شوید.'}, 
+            status=401
+        )
     
-    import json
-    data = json.loads(request.body)
-    review_id = data.get('review_id')
-    action = data.get('action')
+    try:
+        data = json.loads(request.body)
+        review_id = data.get('review_id')
+        action = data.get('action')  # 'like' یا 'unlike'
+        
+        # دریافت نظر
+        review = get_object_or_404(Review, id=review_id)
+        
+        # بررسی دسترسی: کاربر نمی‌تواند به نظر خودش لایک بدهد
+        if review.user == request.user:
+            return JsonResponse({
+                'success': False,
+                'message': 'شما نمی‌توانید به نظر خودتان لایک بدهید.'
+            }, status=400)
+        
+        # انجام عملیات لایک/آنلایک
+        if action == 'like':
+            review.likes.add(request.user)
+            is_liked = True
+        elif action == 'unlike':
+            review.likes.remove(request.user)
+            is_liked = False
+        else:
+            return JsonResponse({
+                'success': False,
+                'message': 'عملیات نامعتبر.'
+            }, status=400)
+        
+        # تعداد کل لایک‌ها
+        like_count = review.likes.count()
+        
+        return JsonResponse({
+            'success': True,
+            'is_liked': is_liked,
+            'like_count': like_count
+        })
+        
+    except json.JSONDecodeError:
+        return JsonResponse({
+            'success': False,
+            'message': 'داده‌های ارسال شده نامعتبر هستند.'
+        }, status=400)
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'message': f'خطا در انجام عملیات: {str(e)}'
+        }, status=500)
+
+    """دریافت نظرات یک محتوا (دوره یا بلاگ)"""
+    if not request.user.is_authenticated:
+        return JsonResponse({
+            'success': False,
+            'message': 'لطفاً وارد شوید.'
+        }, status=401)
     
-    review = get_object_or_404(CourseReview, id=review_id)
-    
-    if action == 'like':
-        review.likes.add(request.user)
-    else:
-        review.likes.remove(request.user)
-    
-    return JsonResponse({
-        'success': True,
-        'like_count': review.get_like_count()
-    })
+    try:
+        content_type = request.GET.get('content_type')  # 'course' یا 'blog'
+        object_id = request.GET.get('object_id')
+        
+        if not content_type or not object_id:
+            return JsonResponse({
+                'success': False,
+                'message': 'پارامترهای مورد نیاز ارسال نشده است.'
+            }, status=400)
+        
+        # دریافت ContentType
+        try:
+            ct = ContentType.objects.get(app_label='courses', model=content_type)
+        except ContentType.DoesNotExist:
+            try:
+                ct = ContentType.objects.get(app_label='blog', model=content_type)
+            except ContentType.DoesNotExist:
+                return JsonResponse({
+                    'success': False,
+                    'message': 'نوع محتوای نامعتبر.'
+                }, status=400)
+        
+        # دریافت نظرات
+        reviews = Review.objects.filter(
+            content_type=ct,
+            object_id=object_id,
+            is_approved=True,
+            is_active=True
+        ).select_related('user').order_by('-created_at')
+        
+        # تبدیل به لیست
+        reviews_data = []
+        for review in reviews:
+            reviews_data.append({
+                'id': review.id,
+                'user': {
+                    'id': review.user.id,
+                    'username': review.user.username,
+                    'full_name': review.user.get_full_name() or review.user.username,
+                    'avatar': getattr(review.user, 'avatar', None)  # اگر فیلد آواتار دارید
+                },
+                'rating': review.rating,
+                'comment': review.comment,
+                'created_at': review.created_at.strftime('%Y-%m-%d %H:%M'),
+                'like_count': review.likes.count(),
+                'is_liked': request.user in review.likes.all() if request.user.is_authenticated else False,
+                'is_owner': review.user == request.user if request.user.is_authenticated else False,
+            })
+        
+        return JsonResponse({
+            'success': True,
+            'reviews': reviews_data,
+            'total': len(reviews_data)
+        })
+        
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'message': f'خطا در دریافت نظرات: {str(e)}'
+        }, status=500)
 
 
 @require_POST
@@ -213,10 +322,9 @@ def review_report(request):
     import json
     data = json.loads(request.body)
     review_id = data.get('review_id')
-    
     # Here you would implement report functionality
     # For now, just mark as reported
-    review = get_object_or_404(CourseReview, id=review_id)
+    review = get_object_or_404(Review, id=review_id)
     # review.is_reported = True
     # review.save()
     

@@ -1,0 +1,26 @@
+<div class="card-section">
+    <h3 class="section-title">
+        <i class="bi bi-star-fill"></i> {{ title }}
+    </h3>
+    <div class="row g-3">
+        {% for blog in blogs %}
+            <div class="col-md-4">
+                <div class="card article-card h-100">
+                    <a href="{{ blog.get_absolute_url }}" class="text-decoration-none">
+                        {% if blog.image %}
+                            <img src="{{ blog.image.url }}" alt="{{ blog.title }}" class="w-100 article-img">
+                        {% endif %}
+                        <div class="card-body">
+                            <h6 class="fw-bold">{{ blog.title }}</h6>
+                            <p class="text-muted small">{{ blog.short_description|truncatechars:80 }}</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <p class="text-muted">هیچ مقاله ویژه‌ای وجود ندارد</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>

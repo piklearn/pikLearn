@@ -3,6 +3,8 @@ from users.models import CustomUser
 from django.urls import reverse
 from django.utils.text import slugify
 from datetime import timedelta
+from reviews.models import Review
+from django.contrib.contenttypes.models import ContentType
 
 # ============================================
 # Category Model
@@ -90,11 +92,48 @@ class Course(models.Model):
     def get_student_count(self):
         return self.enrollments.filter(is_active=True).count()
     
+    def get_reviews(self):
+        """دریافت نظرات اصلی (غیر پاسخ)"""
+        from django.contrib.contenttypes.models import ContentType
+        from reviews.models import Review
+        
+        content_type = ContentType.objects.get_for_model(self)
+        return Review.objects.filter(
+            content_type=content_type,
+            object_id=self.id,
+            parent__isnull=True,  # فقط نظرات اصلی
+            is_approved=True,
+            is_active=True
+        ).order_by('-created_at')
+    
+    def get_all_reviews(self):
+        """دریافت تمام نظرات (شامل پاسخ‌ها)"""
+        from django.contrib.contenttypes.models import ContentType
+        from reviews.models import Review
+        
+        content_type = ContentType.objects.get_for_model(self)
+        return Review.objects.filter(
+            content_type=content_type,
+            object_id=self.id,
+            is_approved=True,
+            is_active=True
+        ).order_by('created_at')
+    
     def get_average_rating(self):
-        reviews = self.course_reviews.filter(is_approved=True)
+        reviews = Review.objects.filter(
+            content_type=ContentType.objects.get_for_model(self),
+            object_id=self.id,
+            parent__isnull=True,  # فقط نظرات اصلی
+            is_approved=True,
+            rating__isnull=False
+        )
         if reviews.exists():
             return sum(r.rating for r in reviews) / reviews.count()
         return 0
+    
+    def get_review_count(self):
+        """تعداد نظرات دوره"""
+        return self.get_reviews().count()
     
     def get_duration_display(self):
         total_seconds = self.duration.total_seconds()
@@ -134,7 +173,10 @@ class Course(models.Model):
         if hours > 0:
             return f"{hours} ساعت و {minutes} دقیقه"
         return f"{minutes} دقیقه"
-    
+        
+    def get_comment_count(self):
+        """تعداد نظرات بلاگ"""
+        return self.get_reviews().count()
     class Meta:
         verbose_name_plural = 'دوره ها'
         verbose_name = 'دوره'
@@ -238,31 +280,6 @@ class Video(models.Model):
         verbose_name_plural = 'ویدئوها'
         verbose_name = 'ویدئو'
         ordering = ['order']
-
-
-# ============================================
-# Course Review Model
-# ============================================
-class CourseReview(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='course_reviews', verbose_name='دوره')
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='course_reviews', verbose_name='کاربر')
-    rating = models.PositiveSmallIntegerField(choices=[(i, i) for i in range(1, 6)], verbose_name='امتیاز')
-    comment = models.TextField(verbose_name='نظر')
-    created_date = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
-    is_approved = models.BooleanField(default=True, verbose_name='تایید شده')
-    likes = models.ManyToManyField(CustomUser, related_name='liked_course_reviews', blank=True, verbose_name='لایک‌ها')
-    
-    def __str__(self):
-        return f"{self.user.username} - {self.course.title}"
-    
-    def get_like_count(self):
-        return self.likes.count()
-    
-    class Meta:
-        verbose_name_plural = 'نظرات دوره'
-        verbose_name = 'نظر دوره'
-        ordering = ['-created_date']
-        unique_together = ['course', 'user']
 
 
 # ============================================

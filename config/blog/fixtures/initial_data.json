@@ -1,0 +1,572 @@
+[
+  {
+    "model": "blog.category",
+    "pk": 1,
+    "fields": {
+      "title": "برنامه‌نویسی",
+      "slug": "برنامه‌نویسی",
+      "parent": null,
+      "description": "مقالات آموزشی در زمینه برنامه‌نویسی و توسعه نرم‌افزار",
+      "image": "blog/categories/2026/01/programming.jpg",
+      "created_at": "2026-01-01T08:00:00Z",
+      "updated_at": "2026-01-01T08:00:00Z"
+    }
+  },
+  {
+    "model": "blog.category",
+    "pk": 2,
+    "fields": {
+      "title": "طراحی وب",
+      "slug": "طراحی-وب",
+      "parent": null,
+      "description": "آموزش طراحی رابط کاربری و تجربه کاربری",
+      "image": "blog/categories/2026/01/web-design.jpg",
+      "created_at": "2026-01-01T08:00:00Z",
+      "updated_at": "2026-01-01T08:00:00Z"
+    }
+  },
+  {
+    "model": "blog.category",
+    "pk": 3,
+    "fields": {
+      "title": "هوش مصنوعی",
+      "slug": "هوش-مصنوعی",
+      "parent": null,
+      "description": "مقالات مرتبط با هوش مصنوعی و یادگیری ماشین",
+      "image": "blog/categories/2026/01/ai.jpg",
+      "created_at": "2026-01-01T08:00:00Z",
+      "updated_at": "2026-01-01T08:00:00Z"
+    }
+  },
+  {
+    "model": "blog.category",
+    "pk": 4,
+    "fields": {
+      "title": "پایتون",
+      "slug": "پایتون",
+      "parent": 1,
+      "description": "آموزش برنامه‌نویسی با زبان پایتون",
+      "image": "blog/categories/2026/01/python.jpg",
+      "created_at": "2026-01-01T08:00:00Z",
+      "updated_at": "2026-01-01T08:00:00Z"
+    }
+  },
+  {
+    "model": "blog.category",
+    "pk": 5,
+    "fields": {
+      "title": "جنگو",
+      "slug": "جنگو",
+      "parent": 1,
+      "description": "آموزش فریمورک جنگو",
+      "image": "blog/categories/2026/01/django.jpg",
+      "created_at": "2026-01-01T08:00:00Z",
+      "updated_at": "2026-01-01T08:00:00Z"
+    }
+  },
+  {
+    "model": "blog.category",
+    "pk": 6,
+    "fields": {
+      "title": "جاوااسکریپت",
+      "slug": "جاوااسکریپت",
+      "parent": 1,
+      "description": "آموزش جاوااسکریپت و فریمورک‌های آن",
+      "image": "blog/categories/2026/01/javascript.jpg",
+      "created_at": "2026-01-01T08:00:00Z",
+      "updated_at": "2026-01-01T08:00:00Z"
+    }
+  },
+  {
+    "model": "blog.category",
+    "pk": 7,
+    "fields": {
+      "title": "UI/UX Design",
+      "slug": "ui-ux-design",
+      "parent": 2,
+      "description": "اصول طراحی رابط کاربری و تجربه کاربری",
+      "image": "blog/categories/2026/01/ui-ux.jpg",
+      "created_at": "2026-01-01T08:00:00Z",
+      "updated_at": "2026-01-01T08:00:00Z"
+    }
+  },
+  {
+    "model": "blog.category",
+    "pk": 8,
+    "fields": {
+      "title": "یادگیری ماشین",
+      "slug": "یادگیری-ماشین",
+      "parent": 3,
+      "description": "مفاهیم و الگوریتم‌های یادگیری ماشین",
+      "image": "blog/categories/2026/01/ml.jpg",
+      "created_at": "2026-01-01T08:00:00Z",
+      "updated_at": "2026-01-01T08:00:00Z"
+    }
+  },
+  {
+    "model": "blog.category",
+    "pk": 9,
+    "fields": {
+      "title": "پایگاه داده",
+      "slug": "پایگاه-داده",
+      "parent": 1,
+      "description": "آموزش کار با پایگاه‌های داده",
+      "image": "blog/categories/2026/01/database.jpg",
+      "created_at": "2026-01-01T08:00:00Z",
+      "updated_at": "2026-01-01T08:00:00Z"
+    }
+  },
+  {
+    "model": "blog.category",
+    "pk": 10,
+    "fields": {
+      "title": "DevOps",
+      "slug": "devops",
+      "parent": null,
+      "description": "آموزش مفاهیم DevOps و ابزارهای مرتبط",
+      "image": "blog/categories/2026/01/devops.jpg",
+      "created_at": "2026-01-01T08:00:00Z",
+      "updated_at": "2026-01-01T08:00:00Z"
+    }
+  },
+  {
+    "model": "blog.tag",
+    "pk": 1,
+    "fields": {
+      "title": "پایتون",
+      "slug": "پایتون",
+      "created_at": "2026-01-01T08:00:00Z"
+    }
+  },
+  {
+    "model": "blog.tag",
+    "pk": 2,
+    "fields": {
+      "title": "جنگو",
+      "slug": "جنگو",
+      "created_at": "2026-01-01T08:00:00Z"
+    }
+  },
+  {
+    "model": "blog.tag",
+    "pk": 3,
+    "fields": {
+      "title": "جاوااسکریپت",
+      "slug": "جاوااسکریپت",
+      "created_at": "2026-01-01T08:00:00Z"
+    }
+  },
+  {
+    "model": "blog.tag",
+    "pk": 4,
+    "fields": {
+      "title": "React",
+      "slug": "react",
+      "created_at": "2026-01-01T08:00:00Z"
+    }
+  },
+  {
+    "model": "blog.tag",
+    "pk": 5,
+    "fields": {
+      "title": "Vue.js",
+      "slug": "vue-js",
+      "created_at": "2026-01-01T08:00:00Z"
+    }
+  },
+  {
+    "model": "blog.tag",
+    "pk": 6,
+    "fields": {
+      "title": "هوش مصنوعی",
+      "slug": "هوش-مصنوعی",
+      "created_at": "2026-01-01T08:00:00Z"
+    }
+  },
+  {
+    "model": "blog.tag",
+    "pk": 7,
+    "fields": {
+      "title": "یادگیری ماشین",
+      "slug": "یادگیری-ماشین",
+      "created_at": "2026-01-01T08:00:00Z"
+    }
+  },
+  {
+    "model": "blog.tag",
+    "pk": 8,
+    "fields": {
+      "title": "طراحی UI",
+      "slug": "طراحی-ui",
+      "created_at": "2026-01-01T08:00:00Z"
+    }
+  },
+  {
+    "model": "blog.tag",
+    "pk": 9,
+    "fields": {
+      "title": "UX",
+      "slug": "ux",
+      "created_at": "2026-01-01T08:00:00Z"
+    }
+  },
+  {
+    "model": "blog.tag",
+    "pk": 10,
+    "fields": {
+      "title": "پایگاه داده",
+      "slug": "پایگاه-داده",
+      "created_at": "2026-01-01T08:00:00Z"
+    }
+  },
+  {
+    "model": "blog.tag",
+    "pk": 11,
+    "fields": {
+      "title": "SQL",
+      "slug": "sql",
+      "created_at": "2026-01-01T08:00:00Z"
+    }
+  },
+  {
+    "model": "blog.tag",
+    "pk": 12,
+    "fields": {
+      "title": "HTML",
+      "slug": "html",
+      "created_at": "2026-01-01T08:00:00Z"
+    }
+  },
+  {
+    "model": "blog.tag",
+    "pk": 13,
+    "fields": {
+      "title": "CSS",
+      "slug": "css",
+      "created_at": "2026-01-01T08:00:00Z"
+    }
+  },
+  {
+    "model": "blog.tag",
+    "pk": 14,
+    "fields": {
+      "title": "Git",
+      "slug": "git",
+      "created_at": "2026-01-01T08:00:00Z"
+    }
+  },
+  {
+    "model": "blog.tag",
+    "pk": 15,
+    "fields": {
+      "title": "Docker",
+      "slug": "docker",
+      "created_at": "2026-01-01T08:00:00Z"
+    }
+  },
+  {
+    "model": "blog.tag",
+    "pk": 16,
+    "fields": {
+      "title": "DevOps",
+      "slug": "devops",
+      "created_at": "2026-01-01T08:00:00Z"
+    }
+  },
+  {
+    "model": "blog.tag",
+    "pk": 17,
+    "fields": {
+      "title": "REST API",
+      "slug": "rest-api",
+      "created_at": "2026-01-01T08:00:00Z"
+    }
+  },
+  {
+    "model": "blog.tag",
+    "pk": 18,
+    "fields": {
+      "title": "GraphQL",
+      "slug": "graphql",
+      "created_at": "2026-01-01T08:00:00Z"
+    }
+  },
+  {
+    "model": "blog.tag",
+    "pk": 19,
+    "fields": {
+      "title": "برنامه‌نویسی",
+      "slug": "برنامه-نویسی",
+      "created_at": "2026-01-01T08:00:00Z"
+    }
+  },
+  {
+    "model": "blog.tag",
+    "pk": 20,
+    "fields": {
+      "title": "آموزش",
+      "slug": "آموزش",
+      "created_at": "2026-01-01T08:00:00Z"
+    }
+  },
+  {
+    "model": "blog.blog",
+    "pk": 1,
+    "fields": {
+      "author": 1,
+      "category": 5,
+      "title": "آموزش جامع جنگو - قسمت اول",
+      "slug": "آموزش-جامع-جنگو-قسمت-اول",
+      "short_description": "در این مقاله با مفاهیم پایه فریمورک جنگو آشنا می‌شوید و اولین پروژه خود را می‌سازید.",
+      "content": "<h2>مقدمه</h2><p>جنگو یک فریمورک قدرتمند و محبوب برای توسعه وب با زبان پایتون است. در این سری مقالات، از صفر تا صد جنگو را یاد خواهید گرفت.</p><h3>نصب و راه‌اندازی</h3><p>برای شروع، ابتدا باید جنگو را نصب کنید. با استفاده از pip می‌توانید این کار را انجام دهید:</p><pre><code>pip install django</code></pre><h3>ایجاد اولین پروژه</h3><p>پس از نصب، می‌توانید اولین پروژه خود را ایجاد کنید:</p><pre><code>django-admin startproject myproject</code></pre><h3>ساخت اپلیکیشن</h3><p>در جنگو، هر بخش از پروژه به صورت اپلیکیشن‌های جداگانه طراحی می‌شود:</p><pre><code>python manage.py startapp blog</code></pre><h3>مدل‌ها و ORM</h3><p>جنگو از ORM قدرتمندی برای کار با پایگاه داده استفاده می‌کند:</p><pre><code>from django.db import models\n\nclass Post(models.Model):\n    title = models.CharField(max_length=200)\n    content = models.TextField()\n    created_at = models.DateTimeField(auto_now_add=True)</code></pre>",
+      "image": "blog/posts/2026/01/django-tutorial.jpg",
+      "status": "published",
+      "published_at": "2026-01-15T10:00:00Z",
+      "is_featured": true,
+      "allow_comments": true,
+      "view_count": 125,
+      "seo_title": "آموزش جامع جنگو - قسمت اول | پیک لرن",
+      "seo_description": "آموزش کامل فریمورک جنگو از نصب تا ساخت اولین پروژه",
+      "created_at": "2026-01-15T08:00:00Z",
+      "updated_at": "2026-01-15T08:00:00Z",
+      "tags": [2, 1, 19, 20]
+    }
+  },
+  {
+    "model": "blog.blog",
+    "pk": 2,
+    "fields": {
+      "author": 2,
+      "category": 4,
+      "title": "۱۰ ترفند پایتون که باید بدانید",
+      "slug": "۱۰-ترفند-پایتون-که-باید-بدانید",
+      "short_description": "با این ۱۰ ترفند، کدهای پایتون خود را حرفه‌ای‌تر و کارآمدتر بنویسید.",
+      "content": "<h2>۱۰ ترفند طلایی پایتون</h2><h3>۱. List Comprehension</h3><p>با استفاده از List Comprehension می‌توانید لیست‌ها را به صورت فشرده و خوانا ایجاد کنید:</p><pre><code>squares = [x**2 for x in range(10)]</code></pre><h3>۲. استفاده از Enumerate</h3><p>برای دسترسی به ایندکس و مقدار همزمان از enumerate استفاده کنید:</p><pre><code>for i, value in enumerate(['a', 'b', 'c']):\n    print(f\"{i}: {value}\")</code></pre><h3>۳. مدیریت فایل‌ها با with</h3><p>استفاده از with برای مدیریت خودکار فایل‌ها:</p><pre><code>with open('file.txt', 'r') as f:\n    content = f.read()</code></pre><h3>۴. زیپ کردن لیست‌ها</h3><p>با zip می‌توانید چند لیست را به هم متصل کنید:</p><pre><code>names = ['Ali', 'Sara', 'Reza']\nages = [25, 30, 35]\nfor name, age in zip(names, ages):\n    print(f\"{name}: {age} سال\")</code></pre><h3>۵. استفاده از *args و **kwargs</h3><p>برای توابع با تعداد آرگومان متغیر از *args و **kwargs استفاده کنید.</p>",
+      "image": "blog/posts/2026/01/python-tricks.jpg",
+      "status": "published",
+      "published_at": "2026-01-20T10:00:00Z",
+      "is_featured": true,
+      "allow_comments": true,
+      "view_count": 98,
+      "seo_title": "۱۰ ترفند پایتون | پیک لرن",
+      "seo_description": "ترفندهای کاربردی پایتون برای برنامه‌نویسی حرفه‌ای",
+      "created_at": "2026-01-20T08:00:00Z",
+      "updated_at": "2026-01-20T08:00:00Z",
+      "tags": [1, 19, 20]
+    }
+  },
+  {
+    "model": "blog.blog",
+    "pk": 3,
+    "fields": {
+      "author": 3,
+      "category": 7,
+      "title": "اصول طراحی رابط کاربری - راهنمای کامل",
+      "slug": "اصول-طراحی-رابط-کاربری-راهنمای-کامل",
+      "short_description": "با اصول کلیدی طراحی رابط کاربری آشنا شوید و تجربه کاربری بهتری ارائه دهید.",
+      "content": "<h2>اصول طراحی رابط کاربری (UI Design)</h2><h3>۱. سادگی</h3><p>طراحی ساده و قابل فهم، کلید موفقیت یک رابط کاربری است. از شلوغی و پیچیدگی‌های غیرضروری پرهیز کنید.</p><h3>۲. ثبات</h3><p>عناصر مشابه باید رفتار یکسانی داشته باشند و در جایگاه‌های ثابتی قرار گیرند.</p><h3>۳. فیدبک</h3><p>کاربران باید بازخورد اقدامات خود را دریافت کنند تا بدانند آیا عملیات با موفقیت انجام شده است یا خیر.</p><h3>۴. دسترسی</h3><p>طراحی باید برای همه کاربران، از جمله افراد دارای معلولیت، قابل استفاده باشد.</p><h3>۵. مدیریت خطا</h3><p>پیام‌های خطا باید واضح و راهنما باشند و به کاربر کمک کنند مشکل را برطرف کند.</p>",
+      "image": "blog/posts/2026/02/ui-design.jpg",
+      "status": "published",
+      "published_at": "2026-02-01T10:00:00Z",
+      "is_featured": false,
+      "allow_comments": true,
+      "view_count": 67,
+      "seo_title": "اصول طراحی رابط کاربری | پیک لرن",
+      "seo_description": "راهنمای کامل اصول طراحی UI و بهبود تجربه کاربری",
+      "created_at": "2026-02-01T08:00:00Z",
+      "updated_at": "2026-02-01T08:00:00Z",
+      "tags": [8, 9, 2]
+    }
+  },
+  {
+    "model": "blog.blog",
+    "pk": 4,
+    "fields": {
+      "author": 1,
+      "category": 8,
+      "title": "مقدمه‌ای بر یادگیری ماشین با پایتون",
+      "slug": "مقدمه-ای-بر-یادگیری-ماشین-با-پایتون",
+      "short_description": "با مفاهیم پایه یادگیری ماشین و کتابخانه‌های پایتون در این حوزه آشنا شوید.",
+      "content": "<h2>مقدمه‌ای بر یادگیری ماشین</h2><h3>یادگیری ماشین چیست؟</h3><p>یادگیری ماشین شاخه‌ای از هوش مصنوعی است که به سیستم‌ها این قابلیت را می‌دهد تا بدون برنامه‌ریزی صریح، از داده‌ها یاد بگیرند.</p><h3>انواع یادگیری ماشین</h3><ul><li><strong>یادگیری نظارت شده (Supervised Learning):</strong> آموزش با داده‌های برچسب‌دار</li><li><strong>یادگیری بدون نظارت (Unsupervised Learning):</strong> کشف الگوها در داده‌های بدون برچسب</li><li><strong>یادگیری تقویتی (Reinforcement Learning):</strong> یادگیری از طریق تعامل با محیط</li></ul><h3>کتابخانه‌های پایتون برای یادگیری ماشین</h3><ul><li><strong>Scikit-learn:</strong> کتابخانه استاندارد برای یادگیری ماشین</li><li><strong>TensorFlow:</strong> کتابخانه قدرتمند برای یادگیری عمیق</li><li><strong>PyTorch:</strong> کتابخانه محبوب برای تحقیقات هوش مصنوعی</li></ul>",
+      "image": "blog/posts/2026/02/ml-intro.jpg",
+      "status": "published",
+      "published_at": "2026-02-10T10:00:00Z",
+      "is_featured": true,
+      "allow_comments": true,
+      "view_count": 87,
+      "seo_title": "مقدمه‌ای بر یادگیری ماشین | پیک لرن",
+      "seo_description": "آشنایی با مفاهیم پایه یادگیری ماشین و کتابخانه‌های پایتون",
+      "created_at": "2026-02-10T08:00:00Z",
+      "updated_at": "2026-02-10T08:00:00Z",
+      "tags": [6, 7, 1, 20]
+    }
+  },
+  {
+    "model": "blog.blog",
+    "pk": 5,
+    "fields": {
+      "author": 2,
+      "category": 6,
+      "title": "جاوااسکریپت مدرن - ES6 و فراتر از آن",
+      "slug": "جاوااسکریپت-مدرن-es6-و-فراتر-از-آن",
+      "short_description": "با ویژگی‌های جدید جاوااسکریپت ES6 و نسخه‌های جدیدتر آشنا شوید.",
+      "content": "<h2>جاوااسکریپت مدرن (ES6+)</h2><h3>۱. متغیرها با let و const</h3><p>به جای var از let و const استفاده کنید تا محدوده متغیرها دقیق‌تر کنترل شود.</p><pre><code>let name = 'Ali';\nconst PI = 3.14159;</code></pre><h3>۲. Arrow Functions</h3><p>توابع پیکانی (Arrow Functions) روشی کوتاه‌تر برای تعریف توابع هستند:</p><pre><code>const sum = (a, b) => a + b;</code></pre><h3>۳. Template Literals</h3><p>با استفاده از Template Literals می‌توانید رشته‌ها را به راحتی ترکیب کنید:</p><pre><code>const name = 'Sara';\nconsole.log(`Hello ${name}!`);</code></pre><h3>۴. Destructuring</h3><p>استخراج مقادیر از آبجکت‌ها و آرایه‌ها به روشی ساده:</p><pre><code>const user = { name: 'Reza', age: 30 };\nconst { name, age } = user;</code></pre><h3>۵. Spread Operator</h3><p>با Spread Operator می‌توانید آرایه‌ها و آبجکت‌ها را به راحتی کپی و ترکیب کنید.</p>",
+      "image": "blog/posts/2026/02/javascript-es6.jpg",
+      "status": "draft",
+      "published_at": null,
+      "is_featured": false,
+      "allow_comments": true,
+      "view_count": 0,
+      "seo_title": "جاوااسکریپت مدرن ES6 | پیک لرن",
+      "seo_description": "ویژگی‌های جدید جاوااسکریپت ES6 و نسخه‌های جدیدتر",
+      "created_at": "2026-02-15T08:00:00Z",
+      "updated_at": "2026-02-15T08:00:00Z",
+      "tags": [3, 19, 4]
+    }
+  },
+  {
+    "model": "blog.blog",
+    "pk": 6,
+    "fields": {
+      "author": 1,
+      "category": 10,
+      "title": "مقدمه‌ای بر Docker و Containerization",
+      "slug": "مقدمه-ای-بر-docker-و-containerization",
+      "short_description": "با Docker و مفهوم Containerization آشنا شوید و برنامه‌های خود را به راحتی مدیریت کنید.",
+      "content": "<h2>مقدمه‌ای بر Docker</h2><h3>Containerization چیست؟</h3><p>Containerization روشی برای بسته‌بندی برنامه‌ها به همراه تمام وابستگی‌های آنها در یک محیط ایزوله است.</p><h3>مزایای Docker</h3><ul><li><strong>ایزوله‌سازی کامل:</strong> هر برنامه در محیط جداگانه اجرا می‌شود</li><li><strong>قابلیت حمل:</strong> برنامه‌ها در هر محیطی اجرا می‌شوند</li><li><strong>مدیریت آسان:</strong> استقرار و مقیاس‌پذیری ساده</li></ul><h3>نصب Docker</h3><p>برای نصب Docker در سیستم خود، به سایت رسمی Docker مراجعه کنید.</p><h3>اولین Container</h3><p>با دستور زیر اولین container خود را اجرا کنید:</p><pre><code>docker run hello-world</code></pre>",
+      "image": "blog/posts/2026/02/docker-intro.jpg",
+      "status": "published",
+      "published_at": "2026-02-20T10:00:00Z",
+      "is_featured": false,
+      "allow_comments": true,
+      "view_count": 56,
+      "seo_title": "مقدمه‌ای بر Docker | پیک لرن",
+      "seo_description": "آشنایی با Docker و مفهوم Containerization",
+      "created_at": "2026-02-20T08:00:00Z",
+      "updated_at": "2026-02-20T08:00:00Z",
+      "tags": [15, 16, 14]
+    }
+  },
+  {
+    "model": "blog.blog",
+    "pk": 7,
+    "fields": {
+      "author": 3,
+      "category": 9,
+      "title": "آموزش SQL - دستورات پایه",
+      "slug": "آموزش-sql-دستورات-پایه",
+      "short_description": "با دستورات پایه SQL برای کار با پایگاه‌های داده آشنا شوید.",
+      "content": "<h2>دستورات پایه SQL</h2><h3>SELECT</h3><p>برای خواندن داده‌ها از جدول:</p><pre><code>SELECT * FROM users;</code></pre><h3>INSERT</h3><p>برای افزودن داده جدید:</p><pre><code>INSERT INTO users (name, email) VALUES ('Ali', 'ali@example.com');</code></pre><h3>UPDATE</h3><p>برای به‌روزرسانی داده‌ها:</p><pre><code>UPDATE users SET name = 'Ali Reza' WHERE id = 1;</code></pre><h3>DELETE</h3><p>برای حذف داده‌ها:</p><pre><code>DELETE FROM users WHERE id = 1;</code></pre><h3>WHERE</h3><p>برای فیلتر کردن نتایج:</p><pre><code>SELECT * FROM users WHERE age > 18;</code></pre>",
+      "image": "blog/posts/2026/02/sql-basics.jpg",
+      "status": "published",
+      "published_at": "2026-02-25T10:00:00Z",
+      "is_featured": true,
+      "allow_comments": true,
+      "view_count": 43,
+      "seo_title": "آموزش SQL - دستورات پایه | پیک لرن",
+      "seo_description": "آموزش دستورات پایه SQL برای کار با پایگاه‌های داده",
+      "created_at": "2026-02-25T08:00:00Z",
+      "updated_at": "2026-02-25T08:00:00Z",
+      "tags": [11, 10, 20]
+    }
+  },
+  {
+    "model": "blog.comment",
+    "pk": 1,
+    "fields": {
+      "blog": 1,
+      "user": 4,
+      "content": "مقاله خیلی خوبی بود! ممنون از اطلاعات مفیدتون. منتظر قسمت بعدی هستم.",
+      "is_approved": true,
+      "created_at": "2026-01-16T09:00:00Z"
+    }
+  },
+  {
+    "model": "blog.comment",
+    "pk": 2,
+    "fields": {
+      "blog": 1,
+      "user": 5,
+      "content": "واقعاً جنگو رو خیلی خوب توضیح دادین. من تازه شروع کردم و خیلی کمکم کرد.",
+      "is_approved": true,
+      "created_at": "2026-01-17T14:30:00Z"
+    }
+  },
+  {
+    "model": "blog.comment",
+    "pk": 3,
+    "fields": {
+      "blog": 2,
+      "user": 4,
+      "content": "ترفندهای پایتون عالی بود! ممنون از شما.",
+      "is_approved": true,
+      "created_at": "2026-01-21T11:00:00Z"
+    }
+  },
+  {
+    "model": "blog.comment",
+    "pk": 4,
+    "fields": {
+      "blog": 2,
+      "user": 3,
+      "content": "بسیار کاربردی و مفید بود. لطفاً مقالات بیشتری در مورد پایتون بنویسید.",
+      "is_approved": true,
+      "created_at": "2026-01-22T08:15:00Z"
+    }
+  },
+  {
+    "model": "blog.comment",
+    "pk": 5,
+    "fields": {
+      "blog": 3,
+      "user": 4,
+      "content": "UI/UX رو خیلی خوب توضیح دادین. کاش مثال‌های بیشتری می‌زدین.",
+      "is_approved": false,
+      "created_at": "2026-02-02T10:00:00Z"
+    }
+  },
+  {
+    "model": "blog.comment",
+    "pk": 6,
+    "fields": {
+      "blog": 4,
+      "user": 5,
+      "content": "یادگیری ماشین رو خیلی روان توضیح دادین. منتظر مقالات بعدی هستم.",
+      "is_approved": true,
+      "created_at": "2026-02-11T13:20:00Z"
+    }
+  },
+  {
+    "model": "blog.comment",
+    "pk": 7,
+    "fields": {
+      "blog": 4,
+      "user": 2,
+      "content": "مطالب عالی بود. کاش کتابخانه‌های بیشتری رو معرفی می‌کردین.",
+      "is_approved": true,
+      "created_at": "2026-02-12T09:45:00Z"
+    }
+  },
+  {
+    "model": "blog.comment",
+    "pk": 8,
+    "fields": {
+      "blog": 6,
+      "user": 4,
+      "content": "Docker رو خیلی خوب توضیح دادین. واقعاً کاربردی بود.",
+      "is_approved": false,
+      "created_at": "2026-02-21T16:00:00Z"
+    }
+  },
+  {
+    "model": "blog.comment",
+    "pk": 9,
+    "fields": {
+      "blog": 7,
+      "user": 5,
+      "content": "دستورات SQL رو خیلی خوب و ساده توضیح دادین. ممنون",
+      "is_approved": true,
+      "created_at": "2026-02-26T08:30:00Z"
+    }
+  }
+]

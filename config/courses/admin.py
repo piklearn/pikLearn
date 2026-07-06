@@ -6,7 +6,10 @@ from .models import UserProgress
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    pass
+    search_fields = (
+    "title",
+    "slug",
+)
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
