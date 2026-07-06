@@ -4,6 +4,29 @@ from blog.models import Blog, Category, Tag
 
 register = template.Library()
 
+@register.inclusion_tag('blog/partials/_blog_card.html')
+def blog_card(blog):
+    """نمایش یک کارت مقاله"""
+    return {
+        'blog': blog,
+    }
+
+@register.inclusion_tag('blog/partials/_blog_list.html')
+def blog_list(limit=6, category_slug=None, tag_slug=None):
+    """نمایش لیست مقالات - خودش از دیتابیس می‌خواند"""
+    blogs = Blog.objects.filter(status=Blog.Status.PUBLISHED)
+    
+    if category_slug:
+        blogs = blogs.filter(category__slug=category_slug)
+    
+    if tag_slug:
+        blogs = blogs.filter(tags__slug=tag_slug)
+    
+    blogs = blogs.order_by('-published_at')[:limit]
+    
+    return {
+        'blogs': blogs,
+    }
 
 # ============================================
 # 1. دریافت و نمایش جدیدترین مقالات

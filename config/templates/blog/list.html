@@ -1,11 +1,12 @@
-{% extends "_base.html" %}
+{% extends "../_base.html" %}
 {% load static %}
 {% load blog_tags %}
 
 {% block title %}وبلاگ | پیک لرن{% endblock title %}
 
 {% block extra_link %}
-    <link rel="stylesheet" href="{% static 'css/detail.css' %}">
+  <link rel="stylesheet" href="{% static 'css/comment.css' %}">
+  <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
 {% endblock extra_link %}
 
 {% block meta %}
@@ -38,7 +39,7 @@
             <div class="col-lg-8">
                 {% if blogs %}
                     <div class="row g-4">
-                        {% blog_list blogs %}
+                        {% blog_list 4 %}
                     </div>
 
                     <!-- Pagination -->
@@ -76,12 +77,19 @@
                 {% endif %}
             </div>
 
-            <!-- ===== RIGHT: Sidebar ===== -->
-            <div class="col-lg-4">
-                {% blog_sidebar %}
-            </div>
+            <!-- ===== RIGHT: Sidebar (Consistent with Course Sidebar) ===== -->
+      <aside class="col-lg-4">
+        <div class="blog-sidebar">
 
+          <!-- Categories Widget -->
+          {% categories_sidebar %}
+
+          <!-- Tags Widget -->
+           {% tags_sidebar %}
+
+           
         </div>
+      </aside>
     </div>
 </section>
 {% endblock main %}
