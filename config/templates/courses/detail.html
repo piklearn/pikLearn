@@ -1,8 +1,7 @@
-<!-- templates/courses/detail.html - Complete Redesign with Glassmorphism -->
-
 {% extends './../_base.html' %}
 {% load static %}
-
+{% load jalali %}
+{% load currency_tags %}
 {% block title %}{{ course.title }}{% endblock title %}
 {% block extra_link %}
   <link rel="stylesheet" href="{% static 'css/detail.css' %}">
@@ -62,7 +61,7 @@
                         </div>
                         <div class="card-meta-item">
                             <i class="bi bi-calendar-event-fill"></i>
-                            <span>بروزرسانی: <strong>{{ course.updated_date|date:"Y/m/d" }}</strong></span>
+                            <span>بروزرسانی: <strong>{{ course.updated_date|jalali }}</strong></span>
                         </div>
                         <div class="card-meta-item">
                             <i class="bi bi-globe2"></i>
@@ -130,11 +129,11 @@
                                 {% if course.price == 0 %}
                                 رایگان
                                 {% else %}
-                                {{ course.get_discounted_price|floatformat:0 }} تومان
+                                {{ course.get_discounted_price|show_price }}
                                 {% endif %}
                             </span>
                             {% if course.discount_price %}
-                            <span class="price-original">{{ course.price|floatformat:0 }} تومان</span>
+                            <span class="price-original">{{ course.price|floatformat|show_price }}</span>
                             <span class="discount-badge">{{ course.get_discount_percentage }}%</span>
                             {% endif %}
                         </div>

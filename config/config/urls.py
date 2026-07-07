@@ -29,7 +29,8 @@ urlpatterns = [
     path('accounts/', include(('users.urls', 'accounts'), namespace='accounts'),),
     path('reviews/', include(('reviews.urls', 'reviews'), namespace='reviews')),
     path('blog/', include(('blog.urls', 'blog'), namespace='blog'),),
-    
+    path('dashboard/', include(('dashboard.urls', 'dashboard'), namespace='dashboard'),),
+
     path('<slug:slug>/', page_views.page_detail, name='page_detail'),
 
 ] 

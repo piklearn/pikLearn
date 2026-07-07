@@ -1,0 +1,57 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% load static %}
+
+{% block title %}سفارش‌های من{% endblock title %}
+
+{% block dashboard_content %}
+<h1 class="section-title h4 mb-4">سفارش‌های من</h1>
+
+{% if purchases %}
+  <div class="table-responsive">
+    <table class="table align-middle">
+      <thead>
+        <tr>
+          <th>شماره سفارش</th>
+          <th>دوره</th>
+          <th>تاریخ</th>
+          <th>مبلغ</th>
+          <th>وضعیت پرداخت</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for purchase in purchases %}
+          <tr>
+            <td>#{{ purchase.id }}</td>
+            <td>{{ purchase.course.title }}</td>
+            <td>{{ purchase.purchase_date|date:"Y/m/d H:i" }}</td>
+            <td>{{ purchase.amount }} تومان</td>
+            <td>
+              {% if purchase.status == "completed" %}
+                <span class="badge bg-success">{{ purchase.get_status_display }}</span>
+              {% elif purchase.status == "pending" %}
+                <span class="badge bg-warning">{{ purchase.get_status_display }}</span>
+              {% elif purchase.status == "failed" %}
+                <span class="badge bg-danger">{{ purchase.get_status_display }}</span>
+              {% else %}
+                <span class="badge bg-secondary">{{ purchase.get_status_display }}</span>
+              {% endif %}
+            </td>
+            <td>
+              <a href="{% url 'dashboard:order_invoice' purchase.pk %}" class="btn btn-sm btn-outline-primary">
+                <i class="bi bi-receipt"></i> فاکتور
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% include "blog/partials/_pagination.html" %}
+{% else %}
+  <div class="empty-state text-center py-5">
+    <i class="bi bi-receipt fs-1"></i>
+    <p class="mt-3 mb-0 text-muted">هنوز سفارشی ثبت نکرده‌اید.</p>
+  </div>
+{% endif %}
+{% endblock dashboard_content %}

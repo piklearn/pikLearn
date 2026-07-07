@@ -13,3 +13,4 @@ class CustomUser(AbstractUser):
     registration_date = models.DateTimeField(auto_now_add=True)
     last_login = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=10, default='active')
+    phone_number = models.CharField(max_length=15, blank=True, verbose_name='شماره تلفن')

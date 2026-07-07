@@ -6,6 +6,34 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 
+class ReviewManager(models.Manager):
+    """مدیریت سفارشی برای مدل Review با select_related پیش‌فرض"""
+    
+    def get_queryset(self):
+        """افزودن select_related پیش‌فرض به تمام کوئری‌ها"""
+        return super().get_queryset().select_related('user', 'content_type', 'parent')
+    
+    def with_all_relations(self):
+        """دریافت نظر با تمام روابط مرتبط"""
+        return self.get_queryset().select_related('user', 'content_type', 'parent')
+    
+    def approved(self):
+        """دریافت نظرات تایید شده"""
+        return self.get_queryset().filter(is_approved=True, is_active=True)
+    
+    def pending(self):
+        """دریافت نظرات در انتظار تایید"""
+        return self.get_queryset().filter(is_approved=False, is_active=True)
+    
+    def main_reviews(self):
+        """دریافت نظرات اصلی (غیر پاسخ)"""
+        return self.get_queryset().filter(parent__isnull=True)
+    
+    def replies(self):
+        """دریافت پاسخ‌ها"""
+        return self.get_queryset().filter(parent__isnull=False)
+
+
 class Review(models.Model):
     
     user = models.ForeignKey(
@@ -59,6 +87,9 @@ class Review(models.Model):
     is_active = models.BooleanField(default=True, verbose_name="فعال")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ثبت")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="تاریخ به‌روزرسانی")
+
+    # استفاده از Manager سفارشی
+    objects = ReviewManager()
 
     class Meta:
         ordering = ["-created_at"]
@@ -119,6 +150,7 @@ class Review(models.Model):
             is_approved=True,
             is_active=True
         ).order_by('created_at')
+    
     def clean(self):
         # برای دوره‌ها، امتیاز الزامی است
         if self.content_type and self.content_type.model == 'course' and self.rating is None:

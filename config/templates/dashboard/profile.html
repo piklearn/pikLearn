@@ -1,0 +1,55 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% load static %}
+
+{% block title %}پروفایل من{% endblock title %}
+
+{% block dashboard_content %}
+<h1 class="section-title h4 mb-4">پروفایل من</h1>
+
+<div class="card p-4">
+  <div class="d-flex align-items-center gap-3 mb-4 pb-4 border-bottom">
+    <div class="rounded-circle bg-info d-flex align-items-center justify-content-center flex-shrink-0"
+         style="width:72px;height:72px;color:var(--on-primary);font-weight:700;font-size:1.5rem;">
+      {{ request.user.username|slice:":1"|upper }}
+    </div>
+    <div>
+      <h5 class="mb-1">{{ request.user.get_full_name|default:request.user.username }}</h5>
+      <span class="text-muted">@{{ request.user.username }}</span>
+    </div>
+  </div>
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label" for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}</label>
+        {{ form.first_name }}
+        {% if form.first_name.errors %}<div class="invalid-feedback d-block">{{ form.first_name.errors.0 }}</div>{% endif %}
+      </div>
+      <div class="col-md-6">
+        <label class="form-label" for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}</label>
+        {{ form.last_name }}
+        {% if form.last_name.errors %}<div class="invalid-feedback d-block">{{ form.last_name.errors.0 }}</div>{% endif %}
+      </div>
+      <div class="col-md-6">
+        <label class="form-label" for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+        {{ form.email }}
+        {% if form.email.errors %}<div class="invalid-feedback d-block">{{ form.email.errors.0 }}</div>{% endif %}
+      </div>
+      <div class="col-md-6">
+        <label class="form-label" for="{{ form.phone_number.id_for_label }}">{{ form.phone_number.label }}</label>
+        {{ form.phone_number }}
+        {% if form.phone_number.errors %}<div class="invalid-feedback d-block">{{ form.phone_number.errors.0 }}</div>{% endif %}
+      </div>
+    </div>
+
+    <div class="d-flex flex-wrap gap-2 mt-4">
+      <button type="submit" class="btn btn-info">ذخیره تغییرات</button>
+      <a href="{% url 'accounts:password_change' %}" class="btn btn-outline-primary">
+        <i class="bi bi-key"></i> تغییر رمز عبور
+      </a>
+    </div>
+  </form>
+</div>
+{% endblock dashboard_content %}

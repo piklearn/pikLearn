@@ -360,6 +360,7 @@ class UserProgress(models.Model):
     is_completed = models.BooleanField(default=False, verbose_name='تکمیل شده')
     last_watched = models.DateTimeField(auto_now=True, verbose_name='آخرین بازدید')
     watch_time = models.DurationField(default=timedelta(), verbose_name='زمان تماشا')
+    completion_status = models.CharField(max_length=11, choices=[('watched', 'Watched'), ('not_watched', 'Not Watched')], default='not_watched', verbose_name='وضعیت')
     
     def __str__(self):
         return f"{self.user.username} - {self.video.title}"

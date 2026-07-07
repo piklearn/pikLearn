@@ -1,0 +1,55 @@
+{% load static %}
+<nav class="list-group shadow border rounded-3 p-3" aria-label="داشبورد کاربری">
+
+  <div class="d-flex align-items-center gap-2 mb-3 pb-3 border-bottom">
+    <div class="rounded-circle bg-info d-flex align-items-center justify-content-center flex-shrink-0"
+         style="width:44px;height:44px;color:var(--on-primary);font-weight:700;">
+      {{ request.user.username|slice:":1"|upper }}
+    </div>
+    <div class="text-truncate">
+      <div class="fw-bold text-truncate">{{ request.user.get_full_name|default:request.user.username }}</div>
+      <small class="text-muted">{{ request.user.get_role_display|default:request.user.role }}</small>
+    </div>
+  </div>
+
+  <ul class="list-unstyled mb-0 d-flex flex-column gap-1">
+    <li>
+      <a href="{% url 'dashboard:home' %}"
+         class="list-group-item list-group-item-action rounded {% if request.resolver_match.url_name == 'home' %}list-group-item-info{% endif %}">
+        <i class="bi bi-speedometer2 me-2"></i>داشبورد
+      </a>
+    </li>
+    <li>
+      <a href="{% url 'dashboard:my_courses' %}"
+         class="list-group-item list-group-item-action rounded {% if request.resolver_match.url_name == 'my_courses' %}list-group-item-info{% endif %}">
+        <i class="bi bi-collection-play me-2"></i>دوره‌های من
+      </a>
+    </li>
+    <li>
+      <a href="{% url 'dashboard:wishlist' %}"
+         class="list-group-item list-group-item-action rounded {% if request.resolver_match.url_name == 'wishlist' %}list-group-item-info{% endif %}">
+        <i class="bi bi-heart me-2"></i>علاقه‌مندی‌ها
+      </a>
+    </li>
+    <li>
+      <a href="{% url 'dashboard:orders' %}"
+         class="list-group-item list-group-item-action rounded {% if request.resolver_match.url_name == 'orders' %}list-group-item-info{% endif %}">
+        <i class="bi bi-receipt me-2"></i>سفارش‌ها
+      </a>
+    </li>
+    <li>
+      <a href="{% url 'dashboard:profile' %}"
+         class="list-group-item list-group-item-action rounded {% if request.resolver_match.url_name == 'profile' %}list-group-item-info{% endif %}">
+        <i class="bi bi-person me-2"></i>پروفایل
+      </a>
+    </li>
+    <li class="pt-2 mt-2 border-top">
+      <form action="{% url 'accounts:logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="list-group-item list-group-item-action rounded w-100 text-start border-0 bg-transparent">
+          <i class="bi bi-box-arrow-left me-2"></i>خروج
+        </button>
+      </form>
+    </li>
+  </ul>
+</nav>

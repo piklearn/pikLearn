@@ -1,0 +1,124 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% load static %}
+{% load jalali %}
+
+{% block title %}داشبورد من{% endblock title %}
+
+{% block dashboard_content %}
+
+<header class="mb-4">
+  <h1 class="section-title h4 mb-1">
+    خوش آمدید، {{ request.user.get_full_name|default:request.user.username }} 👋
+  </h1>
+  <p class="text-muted mb-0">خلاصه‌ای از فعالیت یادگیری شما</p>
+</header>
+
+<section aria-label="آمار کلی" class="row g-3 mb-4">
+  <div class="col-6 col-lg-3">
+    <div class="feature-card text-center p-3 h-100">
+      <h3 class="mb-0">{{ purchased_courses_count }}</h3>
+      <small class="text-muted">دوره‌های خریداری‌شده</small>
+    </div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="feature-card text-center p-3 h-100">
+      <h3 class="mb-0">{{ in_progress_count }}</h3>
+      <small class="text-muted">در حال یادگیری</small>
+    </div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="feature-card text-center p-3 h-100">
+      <h3 class="mb-0">{{ avg_progress }}٪</h3>
+      <small class="text-muted">میانگین پیشرفت</small>
+    </div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="feature-card text-center p-3 h-100 opacity-75">
+      <h3 class="mb-0">{{ certificates_count }}</h3>
+      <small class="text-muted d-block">گواهینامه‌ها</small>
+      <span class="badge bg-secondary mt-1">به‌زودی</span>
+    </div>
+  </div>
+</section>
+
+<section aria-label="ادامه یادگیری" class="mb-4">
+  <h2 class="section-title h5 mb-3">ادامه یادگیری</h2>
+  {% if continue_course %}
+    <div class="course-card p-3">
+      <div class="row g-3 align-items-center">
+        <div class="col-md-3">
+          {% if continue_course.thumbnail %}
+            <img src="{{ continue_course.thumbnail.url }}" alt="{{ continue_course.title }}" class="course-img w-100">
+          {% endif %}
+        </div>
+        <div class="col-md-6">
+          <h6 class="mb-1">{{ continue_course.title }}</h6>
+          {% if continue_video %}
+            <p class="text-muted small mb-2">آخرین درس: {{ continue_video.title }}</p>
+          {% endif %}
+          <div class="progress" style="height:8px;" role="progressbar" aria-valuenow="{{ continue_progress }}" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-bar" style="width: {{ continue_progress }}%;"></div>
+          </div>
+          <small class="text-muted">{{ continue_progress }}٪ تکمیل شده</small>
+        </div>
+        <div class="col-md-3 text-md-end">
+          <a href="{{ continue_course.get_absolute_url }}" class="btn btn-info">ادامه یادگیری</a>
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <div class="empty-state text-center py-4">
+      <i class="bi bi-play-btn fs-1"></i>
+      <p class="mt-2 mb-0 text-muted">هنوز دوره‌ای را شروع نکرده‌اید.</p>
+    </div>
+  {% endif %}
+</section>
+
+<div class="row g-4">
+  <div class="col-lg-7">
+    <section aria-label="فعالیت‌های اخیر">
+      <h2 class="section-title h5 mb-3">فعالیت‌های اخیر</h2>
+      {% if recent_activity %}
+        <ul class="list-group shadow border rounded-3 list-group-flush">
+          {% for event in recent_activity %}
+            <li class="list-group-item d-flex align-items-center gap-2">
+              <i class="bi {{ event.icon }} text-info"></i>
+              <span class="flex-grow-1">{{ event.text }}</span>
+              <small class="text-muted">{{ event.timestamp|jalali }}</small>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <div class="empty-state text-center py-4">
+          <i class="bi bi-clock-history fs-1"></i>
+          <p class="mt-2 mb-0 text-muted">فعالیتی برای نمایش وجود ندارد.</p>
+        </div>
+      {% endif %}
+    </section>
+  </div>
+
+  <div class="col-lg-5">
+    <section aria-label="اعلانات">
+      <h2 class="section-title h5 mb-3">اعلانات</h2>
+      <div class="list-group shadow border rounded-3 p-3">
+        {% if unread_notifications %}
+          <ul class="list-unstyled mb-0 d-flex flex-column gap-2">
+            {% for note in unread_notifications %}
+              <li class="d-flex gap-2">
+                <i class="bi bi-bell text-info mt-1"></i>
+                <span class="small">{{ note.message }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="text-muted small mb-0 text-center py-2">
+            <i class="bi bi-bell-slash d-block fs-4 mb-2"></i>
+            مرکز اعلانات کامل به‌زودی راه‌اندازی می‌شود.
+          </p>
+        {% endif %}
+      </div>
+    </section>
+  </div>
+</div>
+
+{% endblock dashboard_content %}

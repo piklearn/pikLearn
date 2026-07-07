@@ -1,3 +1,4 @@
+{% load jalali %}
 <div class="sidebar-card">
     <h5 class="sidebar-title">
         <i class="bi bi-folder-fill"></i> {{ title }}
@@ -7,7 +8,7 @@
             <li>
                 <a href="{{ post.get_absolute_url }}">
                     <span>{{ post.title|truncatechars:35 }}</span>
-                    <span class="count">{{ post.published_at|date:"Y/m/d" }}</span>
+                    <span class="count">{{ post.published_at|jalali }}</span>
                 </a>
             </li>
         {% empty %}
