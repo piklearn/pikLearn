@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.db.models import F, Q
+from django.db.models import Count, F, Q
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils import timezone
@@ -25,11 +25,43 @@ class PublishedBlogQuerysetMixin:
         )
 
     def get_sidebar_context(self):
+        published = Q(blogs__status=Blog.Status.PUBLISHED, blogs__published_at__lte=timezone.now())
         return {
-            "categories": Category.objects.all(),
-            "popular_tags": Tag.objects.all()[:20],
+            "categories": Category.objects.annotate(
+                post_count=Count("blogs", filter=published, distinct=True)
+            ).order_by("title"),
+            "popular_tags": Tag.objects.annotate(
+                post_count=Count("blogs", filter=published, distinct=True)
+            ).filter(post_count__gt=0).order_by("-post_count", "title")[:30],
             "featured_blogs": self.get_base_queryset().filter(is_featured=True)[:5],
             "latest_blogs": self.get_base_queryset()[:5],
+        }
+
+    ORDER_CHOICES = [
+        ("newest", "جدیدترین"),
+        ("oldest", "قدیمی‌ترین"),
+        ("popular", "پربازدیدترین"),
+        ("featured", "ویژه‌ها"),
+    ]
+
+    def apply_ordering(self, qs):
+        order = self.request.GET.get("order")
+        mapping = {
+            "oldest": ("published_at", "created_at"),
+            "popular": ("-view_count", "-published_at"),
+            "featured": ("-is_featured", "-published_at"),
+        }
+        return qs.order_by(*mapping.get(order, ("-published_at", "-created_at")))
+
+    def get_filter_context(self):
+        get = self.request.GET
+        return {
+            "order_choices": self.ORDER_CHOICES,
+            "current": {
+                "category": get.get("category", ""),
+                "tag": get.get("tag", ""),
+                "order": get.get("order", "newest"),
+            },
         }
 
     def get_querystring(self):
@@ -65,11 +97,13 @@ class BlogListView(PublishedBlogQuerysetMixin, ListView):
         if tag_slug:
             qs = qs.filter(tags__slug=tag_slug)
 
-        return qs.distinct()
+        return self.apply_ordering(qs.distinct())
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(self.get_sidebar_context())
+        context.update(self.get_filter_context())
+        context["total_count"] = context["paginator"].count if context.get("paginator") else 0
         context["querystring"] = self.get_querystring()
         context["search_query"] = self.request.GET.get("q", "")
         context["meta_title"] = "وبلاگ | پیک لرن"
@@ -85,7 +119,7 @@ class BlogSearchView(BlogListView):
         self.query = self.request.GET.get("q", "").strip()
         if not self.query:
             return Blog.objects.none()
-        return (
+        return self.apply_ordering(
             self.get_base_queryset()
             .filter(
                 Q(title__icontains=self.query)
@@ -105,19 +139,22 @@ class BlogSearchView(BlogListView):
 
 class CategoryBlogListView(PublishedBlogQuerysetMixin, ListView):
     model = Blog
-    template_name = "blog/blog_list.html"
+    template_name = "blog/list.html"
     context_object_name = "blogs"
     paginate_by = PAGE_SIZE
 
     def get_queryset(self):
         self.category = get_object_or_404(Category, slug=self.kwargs["slug"])
-        return self.get_base_queryset().filter(category=self.category)
+        return self.apply_ordering(self.get_base_queryset().filter(category=self.category))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(self.get_sidebar_context())
         context["querystring"] = self.get_querystring()
+        context.update(self.get_filter_context())
+        context["total_count"] = context["paginator"].count if context.get("paginator") else 0
         context["current_category"] = self.category
+        context["current"]["category"] = self.category.slug
         context["meta_title"] = f"{self.category.title} | وبلاگ"
         context["meta_description"] = self.category.description or self.category.title
         context["canonical_url"] = self.request.build_absolute_uri(self.category.get_absolute_url())
@@ -126,19 +163,22 @@ class CategoryBlogListView(PublishedBlogQuerysetMixin, ListView):
 
 class TagBlogListView(PublishedBlogQuerysetMixin, ListView):
     model = Blog
-    template_name = "blog/blog_list.html"
+    template_name = "blog/list.html"
     context_object_name = "blogs"
     paginate_by = PAGE_SIZE
 
     def get_queryset(self):
         self.tag = get_object_or_404(Tag, slug=self.kwargs["slug"])
-        return self.get_base_queryset().filter(tags=self.tag)
+        return self.apply_ordering(self.get_base_queryset().filter(tags=self.tag))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(self.get_sidebar_context())
         context["querystring"] = self.get_querystring()
+        context.update(self.get_filter_context())
+        context["total_count"] = context["paginator"].count if context.get("paginator") else 0
         context["current_tag"] = self.tag
+        context["current"]["tag"] = self.tag.slug
         context["meta_title"] = f"برچسب «{self.tag.title}» | وبلاگ"
         context["meta_description"] = f"مقالات مرتبط با برچسب {self.tag.title}"
         context["canonical_url"] = self.request.build_absolute_uri(self.tag.get_absolute_url())

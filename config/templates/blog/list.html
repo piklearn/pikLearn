@@ -1,95 +1,120 @@
-{% extends "../_base.html" %}
+{% extends "_base.html" %}
 {% load static %}
 {% load blog_tags %}
 
-{% block title %}وبلاگ | پیک لرن{% endblock title %}
+{% block title %}{% if current_category %}{{ current_category.title }}{% elif current_tag %}#{{ current_tag.title }}{% else %}مقالات{% endif %} | وبلاگ{% endblock title %}
 
 {% block extra_link %}
   <link rel="stylesheet" href="{% static 'css/comment.css' %}">
   <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+  <link rel="stylesheet" href="{% static 'css/listing.css' %}">
 {% endblock extra_link %}
 
 {% block meta %}
-    <meta name="description" content="مقالات آموزشی پیک لرن در زمینه برنامه‌نویسی، طراحی و هوش مصنوعی">
+  <meta name="description" content="{{ meta_description|default:'مقالات آموزشی پیک لرن در زمینه برنامه‌نویسی، طراحی و هوش مصنوعی' }}">
+  {% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}">{% endif %}
 {% endblock meta %}
 
 {% block main %}
-<!-- ============================================
-     BLOG LIST HERO
-     ============================================ -->
-<section class="blog-hero">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8">
-                <h1 class="blog-title">وبلاگ پیک لرن</h1>
-                <p class="text-muted">جدیدترین مقالات آموزشی در زمینه برنامه‌نویسی، طراحی و فناوری</p>
-            </div>
-        </div>
-    </div>
+<section class="listing-hero">
+  <nav class="listing-breadcrumb" aria-label="مسیر">
+    <a href="/">خانه</a><i class="bi bi-chevron-left"></i>
+    <a href="{% url 'blog:list' %}">وبلاگ</a>
+    {% if current_category %}<i class="bi bi-chevron-left"></i><span>{{ current_category.title }}</span>{% endif %}
+    {% if current_tag %}<i class="bi bi-chevron-left"></i><span>#{{ current_tag.title }}</span>{% endif %}
+  </nav>
+  <h1 class="listing-title">
+    {% if current_category %}مقالات <span class="accent">{{ current_category.title }}</span>
+    {% elif current_tag %}برچسب <span class="accent">#{{ current_tag.title }}</span>
+    {% elif search_query %}نتایج <span class="accent">«{{ search_query }}»</span>
+    {% else %}وبلاگ <span class="accent">پیک لرن</span>{% endif %}
+  </h1>
+  <p>{% if current_category.description %}{{ current_category.description }}{% else %}جدیدترین مقالات آموزشی در زمینه برنامه‌نویسی، طراحی و فناوری{% endif %}</p>
 </section>
 
-<!-- ============================================
-     BLOG LIST CONTENT
-     ============================================ -->
-<section class="blog-main">
-    <div class="container">
-        <div class="row g-4">
+<section class="blog-main pb-5">
+  <div class="row g-4">
 
-            <!-- ===== LEFT: Blog Posts ===== -->
-            <div class="col-lg-8">
-                {% if blogs %}
-                    <div class="row g-4">
-                        {% blog_list 4 %}
-                    </div>
+    <!-- ===== مقالات ===== -->
+    <div class="col-lg-8">
 
-                    <!-- Pagination -->
-                    {% if is_paginated %}
-                        <nav aria-label="صفحه‌بندی" class="mt-4">
-                            <ul class="pagination justify-content-center">
-                                {% if page_obj.has_previous %}
-                                    <li class="page-item">
-                                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">قبلی</a>
-                                    </li>
-                                {% endif %}
-
-                                {% for num in page_obj.paginator.page_range %}
-                                    {% if page_obj.number == num %}
-                                        <li class="page-item active"><span class="page-link">{{ num }}</span></li>
-                                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                                        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
-                                    {% endif %}
-                                {% endfor %}
-
-                                {% if page_obj.has_next %}
-                                    <li class="page-item">
-                                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">بعدی</a>
-                                    </li>
-                                {% endif %}
-                            </ul>
-                        </nav>
-                    {% endif %}
-
-                {% else %}
-                    <div class="empty-state">
-                        <i class="bi bi-newspaper"></i>
-                        <p>هیچ مقاله‌ای یافت نشد.</p>
-                    </div>
-                {% endif %}
+      <!-- نوار فیلتر -->
+      <form method="get" action="{% url 'blog:list' %}" id="blogFilterForm" class="blog-filter-bar" role="search" aria-label="فیلتر مقالات">
+        <div class="row g-2 align-items-center">
+          <div class="col-12">
+            <div class="filter-search">
+              <i class="bi bi-search"></i>
+              <input type="search" class="form-control" name="q" value="{{ search_query }}" placeholder="جست‌وجو در عنوان و متن مقالات…" aria-label="جست‌وجو" autocomplete="off">
             </div>
-
-            <!-- ===== RIGHT: Sidebar (Consistent with Course Sidebar) ===== -->
-      <aside class="col-lg-4">
-        <div class="blog-sidebar">
-
-          <!-- Categories Widget -->
-          {% categories_sidebar %}
-
-          <!-- Tags Widget -->
-           {% tags_sidebar %}
-
-           
+          </div>
+          <div class="col-md-4 col-6">
+            <select class="form-select" name="category" aria-label="دسته‌بندی">
+              <option value="">همه‌ی دسته‌ها</option>
+              {% for c in categories %}
+              <option value="{{ c.slug }}" {% if current.category == c.slug %}selected{% endif %}>{{ c.title }} ({{ c.post_count }})</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-4 col-6">
+            <select class="form-select" name="tag" aria-label="برچسب">
+              <option value="">همه‌ی برچسب‌ها</option>
+              {% for t in popular_tags %}
+              <option value="{{ t.slug }}" {% if current.tag == t.slug %}selected{% endif %}>#{{ t.title }} ({{ t.post_count }})</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-4 col-12">
+            <select class="form-select" name="order" aria-label="مرتب‌سازی">
+              {% for value, label in order_choices %}
+              <option value="{{ value }}" {% if current.order == value %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
         </div>
-      </aside>
+      </form>
+
+      <div class="result-bar">
+        <div class="result-count"><strong>{{ total_count }}</strong> مقاله</div>
+        {% if search_query or current.category or current.tag or current.order != 'newest' %}
+        <a href="{% url 'blog:list' %}" class="btn btn-dark btn-sm"><i class="bi bi-x-circle me-1"></i>پاک کردن فیلترها</a>
+        {% endif %}
+      </div>
+
+      {% if blogs %}
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+          {% for blog in blogs %}
+            {% blog_card blog %}
+          {% endfor %}
+        </div>
+
+        {% include "partials/_pagination.html" %}
+      {% else %}
+        <div class="empty-state">
+          <i class="bi bi-newspaper"></i>
+          <p>هیچ مقاله‌ای با این فیلترها یافت نشد.</p>
+        </div>
+      {% endif %}
     </div>
+
+    <!-- ===== سایدبار ===== -->
+    <aside class="col-lg-4">
+      <div class="blog-sidebar">
+        {% categories_sidebar %}
+        {% tags_sidebar %}
+      </div>
+    </aside>
+  </div>
 </section>
 {% endblock main %}
+
+{% block script %}
+<script>
+  (function () {
+    var form = document.getElementById('blogFilterForm');
+    if (!form) return;
+    form.querySelectorAll('select').forEach(function (el) {
+      el.addEventListener('change', function () { form.submit(); });
+    });
+  })();
+</script>
+{% endblock script %}

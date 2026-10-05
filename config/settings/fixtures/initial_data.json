@@ -55,18 +55,6 @@
   },
   {
     "model": "settings.navbaroption",
-    "pk": 3,
-    "fields": {
-      "name": "دسته‌بندی‌ها",
-      "link": "/categories/",
-      "icon": "bi-grid",
-      "order": 3,
-      "is_active": true,
-      "open_in_new_tab": false
-    }
-  },
-  {
-    "model": "settings.navbaroption",
     "pk": 4,
     "fields": {
       "name": "مقالات",

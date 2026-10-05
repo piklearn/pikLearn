@@ -1,0 +1,87 @@
+{% extends "_base.html" %}
+{% load static %}
+
+{% block title %}دسته‌بندی‌ها{% endblock title %}
+
+{% block extra_link %}
+  <link rel="stylesheet" href="{% static 'css/listing.css' %}">
+{% endblock extra_link %}
+
+{% block main %}
+<section class="listing-hero">
+  <nav class="listing-breadcrumb" aria-label="مسیر">
+    <a href="/">خانه</a><i class="bi bi-chevron-left"></i>
+    <a href="{% url 'courses:list' %}">دوره‌ها</a><i class="bi bi-chevron-left"></i>
+    <span>دسته‌بندی‌ها</span>
+  </nav>
+  <div class="d-flex flex-wrap justify-content-between align-items-end gap-3">
+    <div>
+      <h1 class="listing-title"><span class="accent">دسته‌بندی</span> دوره‌ها</h1>
+      <p>{{ categories|length }} دسته‌ی اصلی و {{ total_courses }} دوره؛ مسیر یادگیری‌ات را انتخاب کن.</p>
+    </div>
+    <div class="filter-search" style="min-width: min(100%, 22rem)">
+      <i class="bi bi-search"></i>
+      <input type="search" id="catSearch" class="form-control" placeholder="جست‌وجوی دسته‌بندی…" aria-label="جست‌وجوی دسته‌بندی" autocomplete="off">
+    </div>
+  </div>
+</section>
+
+<section class="pb-5">
+  <div class="row g-4" id="catGrid">
+    {% for category in categories %}
+    <div class="col-xl-3 col-lg-4 col-md-6 cat-item"
+         data-name="{{ category.name }} {% for c in category.children_list %}{{ c.name }} {% endfor %}">
+      <article class="category-card">
+        <div class="cat-icon"><i class="bi {{ category.icon|default:'bi-folder2-open' }}"></i></div>
+        <h3><a href="{% url 'courses:list' %}?category={{ category.slug }}">{{ category.name }}</a></h3>
+        <p class="cat-desc">{{ category.description|default:"دوره‌های این دسته را ببینید."|truncatechars:90 }}</p>
+
+        {% if category.children_list %}
+        <div class="sub-pills">
+          {% for child in category.children_list|slice:":6" %}
+          <a href="{% url 'courses:list' %}?category={{ child.slug }}">{{ child.name }} <small class="text-muted">({{ child.course_count }})</small></a>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="cat-footer">
+          <span><i class="bi bi-collection-play me-1"></i>{{ category.course_count }} دوره</span>
+          <span class="go">مشاهده <i class="bi bi-arrow-left"></i></span>
+        </div>
+      </article>
+    </div>
+    {% empty %}
+    <div class="col-12">
+      <div class="empty-state"><i class="bi bi-folder2-open"></i><p>هنوز دسته‌بندی‌ای ثبت نشده است.</p></div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="empty-state d-none" id="catEmpty">
+    <i class="bi bi-search"></i>
+    <p>دسته‌بندی‌ای با این نام پیدا نشد.</p>
+  </div>
+</section>
+{% endblock main %}
+
+{% block script %}
+<script>
+  (function () {
+    var input = document.getElementById('catSearch');
+    var items = document.querySelectorAll('.cat-item');
+    var empty = document.getElementById('catEmpty');
+    if (!input) return;
+    // یکسان‌سازی «ي/ی» و «ك/ک» تا جست‌وجوی فارسی دقیق‌تر باشد
+    var norm = function (s) { return (s || '').replace(/ي/g, 'ی').replace(/ك/g, 'ک').toLowerCase().trim(); };
+    input.addEventListener('input', function () {
+      var q = norm(input.value), shown = 0;
+      items.forEach(function (el) {
+        var hit = !q || norm(el.dataset.name).indexOf(q) !== -1;
+        el.classList.toggle('d-none', !hit);
+        if (hit) shown++;
+      });
+      empty.classList.toggle('d-none', shown !== 0);
+    });
+  })();
+</script>
+{% endblock script %}

@@ -10,6 +10,8 @@ urlpatterns = [
         views.CourseAutocomplete.as_view(),
         name='course-autocomplete',
     ),
+    # Categories page (must be before the slug route)
+    path('categories/', views.CategoryListView.as_view(), name='categories'),
     # Course detail with slug
     path('<slug:slug>/', views.CourseDetailView.as_view(), name='detail'),
     # Course detail with pk (fallback)

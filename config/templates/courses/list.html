@@ -1,0 +1,215 @@
+{% extends "_base.html" %}
+{% load static %}
+
+{% block title %}دوره‌ها{% endblock title %}
+
+{% block extra_link %}
+  <link rel="stylesheet" href="{% static 'css/listing.css' %}">
+{% endblock extra_link %}
+
+{% block main %}
+<section class="listing-hero">
+  <nav class="listing-breadcrumb" aria-label="مسیر">
+    <a href="/">خانه</a><i class="bi bi-chevron-left"></i>
+    <span>دوره‌ها</span>
+    {% if selected_category %}<i class="bi bi-chevron-left"></i><span>{{ selected_category.name }}</span>{% endif %}
+  </nav>
+  <div class="d-flex flex-wrap justify-content-between align-items-end gap-3">
+    <div>
+      <h1 class="listing-title">
+        {% if selected_category %}دوره‌های <span class="accent">{{ selected_category.name }}</span>{% else %}همه‌ی <span class="accent">دوره‌ها</span>{% endif %}
+      </h1>
+      <p>{% if selected_category.description %}{{ selected_category.description }}{% else %}دوره‌ی مناسب خودت را پیدا کن و همین امروز شروع کن.{% endif %}</p>
+    </div>
+    <a href="{% url 'courses:categories' %}" class="btn btn-dark">
+      <i class="bi bi-grid-3x3-gap me-1"></i>همه‌ی دسته‌بندی‌ها
+    </a>
+  </div>
+</section>
+
+<section class="pb-5">
+  <div class="row g-4">
+
+    <!-- ============ فیلترها ============ -->
+    <aside class="col-lg-3">
+      <button class="btn btn-dark w-100 filter-toggle-btn justify-content-center mb-3" type="button"
+        data-bs-toggle="collapse" data-bs-target="#filtersCollapse" aria-expanded="false" aria-controls="filtersCollapse">
+        <i class="bi bi-sliders"></i> فیلترها
+        {% if active_filters %}<span class="badge bg-primary rounded-pill">{{ active_filters|length }}</span>{% endif %}
+      </button>
+
+      <div class="collapse filters-collapse" id="filtersCollapse">
+        <form method="get" id="filterForm" class="filter-panel filters-sticky" role="search" aria-label="فیلتر دوره‌ها">
+          <div class="filter-heading">
+            <span><i class="bi bi-funnel me-1"></i>فیلتر و جست‌وجو</span>
+            {% if active_filters %}
+            <a href="{% url 'courses:list' %}" class="small text-decoration-none" style="color: var(--primary)">پاک کردن</a>
+            {% endif %}
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-label" for="f-q">جست‌وجو</label>
+            <div class="filter-search">
+              <i class="bi bi-search"></i>
+              <input type="search" class="form-control" id="f-q" name="q" value="{{ search_query }}"
+                placeholder="عنوان، مدرس، موضوع…" autocomplete="off">
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-label" for="f-category">دسته‌بندی</label>
+            <select class="form-select" id="f-category" name="category">
+              <option value="">همه‌ی دسته‌ها</option>
+              {% for root in categories %}
+                {% if root.children_list %}
+                  <optgroup label="{{ root.name }}">
+                    <option value="{{ root.slug }}" {% if current.category == root.slug %}selected{% endif %}>
+                      همه‌ی {{ root.name }} ({{ root.course_count }})
+                    </option>
+                    {% for child in root.children_list %}
+                      <option value="{{ child.slug }}" {% if current.category == child.slug %}selected{% endif %}>
+                        {{ child.name }} ({{ child.course_count }})
+                      </option>
+                    {% endfor %}
+                  </optgroup>
+                {% else %}
+                  <option value="{{ root.slug }}" {% if current.category == root.slug %}selected{% endif %}>
+                    {{ root.name }} ({{ root.course_count }})
+                  </option>
+                {% endif %}
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <span class="filter-label">سطح دوره</span>
+            <div class="filter-options">
+              <label class="filter-option"><input type="radio" name="difficulty" value="" {% if not current.difficulty %}checked{% endif %}><span>همه</span></label>
+              {% for value, label in difficulty_choices %}
+              <label class="filter-option"><input type="radio" name="difficulty" value="{{ value }}" {% if current.difficulty == value %}checked{% endif %}><span>{{ label }}</span></label>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <span class="filter-label">قیمت</span>
+            <div class="filter-options">
+              <label class="filter-option"><input type="radio" name="price" value="" {% if not current.price %}checked{% endif %}><span>همه</span></label>
+              {% for value, label in price_choices %}
+              <label class="filter-option"><input type="radio" name="price" value="{{ value }}" {% if current.price == value %}checked{% endif %}><span>{{ label }}</span></label>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <span class="filter-label">زبان</span>
+            <div class="filter-options">
+              <label class="filter-option"><input type="radio" name="language" value="" {% if not current.language %}checked{% endif %}><span>همه</span></label>
+              {% for value, label in language_choices %}
+              <label class="filter-option"><input type="radio" name="language" value="{{ value }}" {% if current.language == value %}checked{% endif %}><span>{{ label }}</span></label>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <div class="form-check form-switch m-0">
+              <input class="form-check-input" type="checkbox" role="switch" id="f-cert" name="certificate" value="1" {% if current.certificate == '1' %}checked{% endif %}>
+              <label class="form-check-label" for="f-cert">فقط دوره‌های دارای گواهینامه</label>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100 mt-2">اعمال فیلتر</button>
+        </form>
+      </div>
+    </aside>
+
+    <!-- ============ نتایج ============ -->
+    <div class="col-lg-9">
+      <div class="result-bar">
+        <div class="result-count"><strong>{{ total_count }}</strong> دوره پیدا شد</div>
+        <div class="d-flex align-items-center gap-2">
+          <label for="f-order" class="small text-muted mb-0">مرتب‌سازی:</label>
+          <select class="form-select form-select-sm" id="f-order" name="order" form="filterForm">
+            {% for value, label in order_choices %}
+            <option value="{{ value }}" {% if current.order == value %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      {% if active_filters %}
+      <div class="chip-row" aria-label="فیلترهای فعال">
+        {% for chip in active_filters %}
+        <a href="{{ chip.url }}" class="filter-chip" title="حذف این فیلتر">
+          {{ chip.label }} <i class="bi bi-x-circle-fill"></i>
+        </a>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% if courses %}
+      <div class="row g-4">
+        {% for course in courses %}
+        <div class="col-xl-4 col-md-6">
+          <div class="card course-card h-100 p-3">
+            <a href="{{ course.get_absolute_url }}" class="text-decoration-none text-dark d-flex flex-column h-100">
+              <div class="course-cover">
+                <img src="{{ course.thumbnail.url }}" alt="{{ course.title }}" loading="lazy">
+                {% if course.category %}<span class="cover-badge">{{ course.category.name }}</span>{% endif %}
+                {% if course.get_discount_percentage %}<span class="discount-badge">{{ course.get_discount_percentage }}٪ تخفیف</span>{% endif %}
+              </div>
+
+              <h6 class="fw-bold">{{ course.title }}</h6>
+              <div class="text-muted small mb-2">مدرس: {{ course.instructor }}</div>
+
+              <div class="meta-row">
+                <span title="امتیاز"><i class="bi bi-star-fill"></i>{% if course.avg_rating %}{{ course.avg_rating|floatformat:1 }}{% else %}جدید{% endif %}</span>
+                <span title="دانشجو"><i class="bi bi-people-fill"></i>{{ course.student_count }}</span>
+                <span title="مدت دوره"><i class="bi bi-clock-fill"></i>{{ course.get_duration_display }}</span>
+                <span title="سطح"><i class="bi bi-bar-chart-fill"></i>{{ course.get_difficulty_level_display }}</span>
+              </div>
+
+              <hr class="mt-auto">
+
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="price-box">
+                  {% if course.final_price == 0 %}
+                    <span class="free">رایگان</span>
+                  {% else %}
+                    {% if course.discount_price %}<span class="old">{{ course.price|floatformat:"0g" }}</span>{% endif %}
+                    <span class="now">{{ course.final_price|floatformat:"0g" }} تومان</span>
+                  {% endif %}
+                </div>
+                <span class="badge bg-info rounded-pill px-3 py-2">مشاهده</span>
+              </div>
+            </a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      {% include "partials/_pagination.html" %}
+
+      {% else %}
+      <div class="empty-state">
+        <i class="bi bi-search"></i>
+        <p>دوره‌ای با این فیلترها پیدا نشد.</p>
+        <a href="{% url 'courses:list' %}" class="btn btn-dark btn-sm">پاک کردن فیلترها</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock main %}
+
+{% block script %}
+<script>
+  (function () {
+    var form = document.getElementById('filterForm');
+    if (!form) return;
+    // انتخاب‌ها بلافاصله اعمال می‌شوند؛ جست‌وجوی متنی با Enter
+    document.querySelectorAll('#filterForm select, #f-order, #filterForm input[type=radio], #filterForm input[type=checkbox]')
+      .forEach(function (el) { el.addEventListener('change', function () { form.submit(); }); });
+  })();
+</script>
+{% endblock script %}

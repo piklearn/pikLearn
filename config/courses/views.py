@@ -113,56 +113,205 @@ class CourseAutocomplete(autocomplete.Select2QuerySetView):
         return qs
 
 
+def _descendant_ids(category):
+    """شناسه‌ی دسته به‌همراه تمام زیردسته‌های آن (تا هر عمقی)."""
+    ids, frontier = [category.id], [category.id]
+    while frontier:
+        frontier = list(
+            Category.objects.filter(parent_category_id__in=frontier)
+            .values_list('id', flat=True)
+        )
+        ids.extend(frontier)
+    return ids
+
+
 class CourseListView(ListView):
+    """لیست دوره‌ها با جست‌وجو و فیلتر.
+
+    پارامترهای GET: q (یا search), category, difficulty, price, language,
+    certificate, order
+    """
     model = Course
     template_name = 'courses/list.html'
     context_object_name = 'courses'
     paginate_by = 12
-    
+
+    ORDER_CHOICES = [
+        ('newest', 'جدیدترین'),
+        ('popular', 'پرمخاطب‌ترین'),
+        ('rating', 'بیشترین امتیاز'),
+        ('price_asc', 'ارزان‌ترین'),
+        ('price_desc', 'گران‌ترین'),
+    ]
+    PRICE_CHOICES = [
+        ('free', 'رایگان'),
+        ('paid', 'پولی'),
+        ('discount', 'دارای تخفیف'),
+    ]
+
     def get_queryset(self):
-        qs = super().get_queryset().filter(status='published')
-        
-        # Filter by category
-        category = self.request.GET.get('category')
-        if category:
-            qs = qs.filter(category__slug=category)
-        
-        # Filter by difficulty
-        difficulty = self.request.GET.get('difficulty')
-        if difficulty:
-            qs = qs.filter(difficulty_level=difficulty)
-        
-        # Filter by price
-        price_type = self.request.GET.get('price')
-        if price_type == 'free':
-            qs = qs.filter(price=0)
-        elif price_type == 'paid':
-            qs = qs.filter(price__gt=0)
-        
-        # Search
-        search = self.request.GET.get('search')
+        from django.db.models import OuterRef, Subquery, FloatField
+        from django.db.models.functions import Coalesce
+
+        get = self.request.GET
+        rating_sq = (
+            Review.objects.filter(
+                content_type=ContentType.objects.get_for_model(Course),
+                object_id=OuterRef('pk'),
+                parent__isnull=True,
+                is_approved=True,
+                rating__isnull=False,
+            )
+            .values('object_id')
+            .annotate(avg=Avg('rating'))
+            .values('avg')
+        )
+        qs = (
+            Course.objects.filter(status='published')
+            .select_related('instructor', 'category')
+            .annotate(
+                student_count=Count(
+                    'enrollments',
+                    filter=Q(enrollments__is_active=True),
+                    distinct=True,
+                ),
+                avg_rating=Coalesce(Subquery(rating_sq, output_field=FloatField()), 0.0),
+                final_price=Coalesce('discount_price', 'price'),
+            )
+        )
+
+        search = (get.get('q') or get.get('search') or '').strip()
         if search:
             qs = qs.filter(
-                Q(title__icontains=search) | 
-                Q(description__icontains=search)
+                Q(title__icontains=search)
+                | Q(short_description__icontains=search)
+                | Q(description__icontains=search)
+                | Q(instructor__username__icontains=search)
             )
-        
-        # Ordering
-        order = self.request.GET.get('order')
-        if order == 'newest':
-            qs = qs.order_by('-created_date')
-        elif order == 'popular':
-            qs = qs.annotate(student_count=Count('enrollments')).order_by('-student_count')
-        elif order == 'rating':
-            qs = qs.annotate(avg_rating=Avg('course_reviews__rating')).order_by('-avg_rating')
-        else:
-            qs = qs.order_by('-created_date')
-        
-        return qs
-    
+
+        category = get.get('category')
+        if category:
+            cat = Category.objects.filter(slug=category).first()
+            qs = qs.filter(category_id__in=_descendant_ids(cat)) if cat else qs.none()
+
+        difficulty = get.get('difficulty')
+        if difficulty in dict(Course.DIFFICULTY_LEVELS):
+            qs = qs.filter(difficulty_level=difficulty)
+
+        language = get.get('language')
+        if language in dict(Course.LANGUAGE_CHOICES):
+            qs = qs.filter(language=language)
+
+        price_type = get.get('price')
+        if price_type == 'free':
+            qs = qs.filter(final_price=0)
+        elif price_type == 'paid':
+            qs = qs.filter(final_price__gt=0)
+        elif price_type == 'discount':
+            qs = qs.filter(discount_price__isnull=False, price__gt=0)
+
+        if get.get('certificate') == '1':
+            qs = qs.filter(has_certificate=True)
+
+        ordering = {
+            'popular': ('-student_count', '-views'),
+            'rating': ('-avg_rating', '-student_count'),
+            'price_asc': ('final_price', '-created_date'),
+            'price_desc': ('-final_price', '-created_date'),
+        }.get(get.get('order'), ('-created_date',))
+        return qs.order_by(*ordering)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['categories'] = Category.objects.all()
+        get = self.request.GET
+
+        # دسته‌ها به‌صورت درخت، همراه با تعداد دوره‌های منتشرشده
+        published = Course.objects.filter(status='published')
+        counts = dict(
+            published.values_list('category_id').annotate(c=Count('id')).values_list('category_id', 'c')
+        )
+        roots = list(Category.objects.filter(parent_category__isnull=True).order_by('name'))
+        for root in roots:
+            root.children_list = list(root.subcategories.all().order_by('name'))
+            for child in root.children_list:
+                child.course_count = counts.get(child.id, 0)
+            root.course_count = counts.get(root.id, 0) + sum(c.course_count for c in root.children_list)
+
+        params = get.copy()
+        params.pop('page', None)
+        encoded = params.urlencode()
+
+        selected_category = Category.objects.filter(slug=get.get('category')).first() if get.get('category') else None
+        def chip(label, *keys):
+            """چیپ فیلتر فعال + لینکی که همان فیلتر را حذف می‌کند."""
+            rest = get.copy()
+            rest.pop('page', None)
+            for k in keys:
+                rest.pop(k, None)
+            query = rest.urlencode()
+            url = f"?{query}" if query else self.request.path
+            return {'label': label, 'url': url}
+
+        active = []
+        if get.get('q') or get.get('search'):
+            active.append(chip('جست‌وجو: ' + (get.get('q') or get.get('search')), 'q', 'search'))
+        if selected_category:
+            active.append(chip(selected_category.name, 'category'))
+        if get.get('difficulty') in dict(Course.DIFFICULTY_LEVELS):
+            active.append(chip(dict(Course.DIFFICULTY_LEVELS)[get.get('difficulty')], 'difficulty'))
+        if get.get('language') in dict(Course.LANGUAGE_CHOICES):
+            active.append(chip(dict(Course.LANGUAGE_CHOICES)[get.get('language')], 'language'))
+        if get.get('price') in dict(self.PRICE_CHOICES):
+            active.append(chip(dict(self.PRICE_CHOICES)[get.get('price')], 'price'))
+        if get.get('certificate') == '1':
+            active.append(chip('دارای گواهینامه', 'certificate'))
+
+        context.update({
+            'categories': roots,
+            'selected_category': selected_category,
+            'querystring': f'{encoded}&' if encoded else '',
+            'search_query': get.get('q') or get.get('search') or '',
+            'current': {
+                'category': get.get('category', ''),
+                'difficulty': get.get('difficulty', ''),
+                'language': get.get('language', ''),
+                'price': get.get('price', ''),
+                'certificate': get.get('certificate', ''),
+                'order': get.get('order', 'newest'),
+            },
+            'active_filters': active,
+            'difficulty_choices': Course.DIFFICULTY_LEVELS,
+            'language_choices': Course.LANGUAGE_CHOICES,
+            'price_choices': self.PRICE_CHOICES,
+            'order_choices': self.ORDER_CHOICES,
+            'total_count': context['paginator'].count if context.get('paginator') else len(context['courses']),
+        })
+        return context
+
+
+class CategoryListView(ListView):
+    """صفحه‌ی دسته‌بندی‌ها: دسته‌های اصلی، زیردسته‌ها و تعداد دوره‌ها."""
+    model = Category
+    template_name = 'courses/category_list.html'
+    context_object_name = 'categories'
+
+    def get_queryset(self):
+        return Category.objects.filter(parent_category__isnull=True).order_by('name')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        published = Course.objects.filter(status='published')
+        counts = dict(
+            published.values_list('category_id').annotate(c=Count('id')).values_list('category_id', 'c')
+        )
+        total = 0
+        for root in context['categories']:
+            root.children_list = list(root.subcategories.all().order_by('name'))
+            for child in root.children_list:
+                child.course_count = counts.get(child.id, 0)
+            root.course_count = counts.get(root.id, 0) + sum(c.course_count for c in root.children_list)
+            total += root.course_count
+        context['total_courses'] = total
         return context
 
 
