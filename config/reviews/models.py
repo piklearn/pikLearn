@@ -103,6 +103,7 @@ class Review(models.Model):
         constraints = [
             models.UniqueConstraint(
                 fields=["user", "content_type", "object_id"],
+                condition=models.Q(parent__isnull=True),   # ← این خط اضافه شد
                 name="reviews_unique_user_content",
             ),
         ]
@@ -152,10 +153,15 @@ class Review(models.Model):
         ).order_by('created_at')
     
     def clean(self):
-        # برای دوره‌ها، امتیاز الزامی است
-        if self.content_type and self.content_type.model == 'course' and self.rating is None:
+        # امتیاز فقط برای نظر اصلی دوره الزامی است (نه پاسخ‌ها)
+        if (
+            self.parent_id is None
+            and self.content_type_id
+            and self.content_type.model == 'course'
+            and self.rating is None
+        ):
             raise ValidationError({"rating": "امتیاز برای دوره‌ها الزامی است."})
-        
+
         if self.rating is not None and not (1 <= self.rating <= 5):
             raise ValidationError({"rating": "امتیاز باید بین ۱ تا ۵ باشد."})
 

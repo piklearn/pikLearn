@@ -92,7 +92,7 @@
                                     {% endfor %}
                         </span>
                         <span class="rating-number">{{ avg_rating|floatformat:1 }}</span>
-                        <span class="rating-count">({{ course.course_reviews.count }} نظر)</span>
+                        <span class="rating-count">({{ course.get_review_count }} نظر)</span>
                         <span class="divider">|</span>
                         <span class="student-count"><i class="bi bi-people-fill"></i> {{ student_count }} دانشجو</span>
                     </div>

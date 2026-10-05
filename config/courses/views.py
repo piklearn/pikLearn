@@ -9,7 +9,6 @@ from django.utils.decorators import method_decorator
 from django.contrib import messages
 from dal import autocomplete
 from courses.models import Course,Category, Chapter, Video, CourseFAQ, CourseResource, CourseEnrollment, Wishlist
-from courses.forms import CourseReviewForm
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -18,6 +17,9 @@ from django.http import Http404
 import json
 from django.contrib.contenttypes.models import ContentType
 from reviews.models import Review
+from reviews.utils import build_review_context
+
+
 class CourseDetailView(DetailView):
     model = Course
     template_name = 'courses/detail.html'
@@ -60,11 +62,8 @@ class CourseDetailView(DetailView):
         context['faqs'] = course.faqs.all()
         context['resources'] = course.resources.all()
         
-        # Get reviews with pagination
-        reviews = course.get_reviews()
-        paginator = Paginator(reviews, 5)
-        page_number = self.request.GET.get('page')
-        context['reviews'] = paginator.get_page(page_number)
+        # Reviews: list + submit form (shared with blog)
+        context.update(build_review_context(self.request, course))
         
         # Get related courses
         related_courses = Course.objects.filter(

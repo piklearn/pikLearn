@@ -5,7 +5,14 @@ from . import views
 app_name = "reviews"
 
 urlpatterns = [
-    path("add/<int:course_id>/", views.CreateReviewView.as_view(), name="add"),
-    path("edit/<int:pk>/", views.UpdateReviewView.as_view(), name="edit"),
-    path("delete/<int:pk>/", views.DeleteReviewView.as_view(), name="delete"),
+    path(
+        "add/<str:model_name>/<int:object_id>/",
+        views.add_review,
+        name="add",
+    ),
+    path(
+        "reply/<int:parent_id>/",
+        views.add_reply,
+        name="reply",
+    ),
 ]

@@ -1,14 +1,11 @@
-from django.contrib import messages
 from django.db.models import Count, F, Q
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
 from django.views.generic import DetailView, ListView
-from django.core.paginator import Paginator
 
-from reviews.models import Review
+from reviews.utils import build_review_context
 
-from .forms import ReviewForm
 from .models import Blog, Category, Tag
 
 PAGE_SIZE = 9
@@ -206,40 +203,9 @@ class BlogDetailView(PublishedBlogQuerysetMixin, DetailView):
         context = super().get_context_data(**kwargs)
         blog = self.object
 
-        context.setdefault("comment_form", ReviewForm())
-
-        # Get reviews with pagination
-        reviews = blog.get_reviews()
-        paginator = Paginator(reviews, 5)
-        page_number = self.request.GET.get('page')
-        context['reviews'] = paginator.get_page(page_number)
-        
+        context.update(build_review_context(self.request, blog))
 
         context["meta_title"] = blog.meta_title
         context["meta_description"] = blog.meta_description
         context["canonical_url"] = self.request.build_absolute_uri(blog.get_absolute_url())
         return context
-
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-
-        if not self.object.allow_comments:
-            messages.error(request, "ارسال نظر برای این مقاله غیرفعال است.")
-            return redirect(self.object.get_absolute_url())
-
-        if not request.user.is_authenticated:
-            messages.error(request, "برای ارسال نظر ابتدا وارد حساب کاربری خود شوید.")
-            login_url = reverse("accounts:login")
-            return redirect(f"{login_url}?next={self.object.get_absolute_url()}")
-
-        form = ReviewForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.blog = self.object
-            comment.user = request.user
-            comment.save()
-            messages.success(request, "نظر شما ثبت شد و پس از تایید نمایش داده می‌شود.")
-            return redirect(self.object.get_absolute_url())
-
-        context = self.get_context_data(comment_form=form)
-        return self.render_to_response(context)

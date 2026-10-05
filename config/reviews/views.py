@@ -1,130 +1,134 @@
-from django import forms
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import PermissionDenied
+from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
+from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
-from django.views.generic import CreateView, UpdateView, DeleteView
+from django.utils import timezone
+from django.views.decorators.http import require_POST
 
+from blog.models import Blog
 from courses.models import Course
+
+from .forms import ReplyForm, ReviewForm
 from .models import Review
+from .utils import login_url_with_next, save_draft
 
 
-class ReviewForm(forms.ModelForm):
-    class Meta:
-        model = Review
-        fields = ["rating", "comment"]
-        widgets = {
-            "rating": forms.NumberInput(
-                attrs={"min": 1, "max": 5, "class": "form-control"}
-            ),
-            "comment": forms.Textarea(
-                attrs={"rows": 4, "class": "form-control"}
-            ),
-        }
-
-    def clean_rating(self):
-        rating = self.cleaned_data["rating"]
-        if rating < 1 or rating > 5:
-            raise forms.ValidationError("امتیاز باید بین ۱ تا ۵ باشد.")
-        return rating
-
-
-class CreateReviewView(LoginRequiredMixin, CreateView):
-    """Create a review for a course. One review per (user, course)."""
-
-    model = Review
-    form_class = ReviewForm
-    template_name = "reviews/review_form.html"
-
-    def dispatch(self, request, *args, **kwargs):
-        self.course = get_object_or_404(Course, pk=kwargs["course_id"])
-        return super().dispatch(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["course"] = self.course
-        return context
-
-    def form_valid(self, form):
-        if Review.objects.filter(user=self.request.user, course=self.course).exists():
-            messages.warning(self.request, "شما قبلاً برای این دوره نظر ثبت کرده‌اید.")
-            return redirect(self.get_success_url())
-
-        form.instance.user = self.request.user
-        form.instance.course = self.course
-
-        try:
-            with transaction.atomic():
-                self.object = form.save()
-        except IntegrityError:
-            messages.warning(self.request, "شما قبلاً برای این دوره نظر ثبت کرده‌اید.")
-            return redirect(self.get_success_url())
-
-        messages.success(
-            self.request, "نظر شما ثبت شد و پس از تایید نمایش داده می‌شود."
+def _get_target(model_name, object_id):
+    if model_name == "course":
+        return get_object_or_404(Course, pk=object_id)
+    if model_name == "blog":
+        return get_object_or_404(
+            Blog,
+            pk=object_id,
+            status=Blog.Status.PUBLISHED,
+            published_at__lte=timezone.now(),
         )
-        return redirect(self.get_success_url())
-
-    def form_invalid(self, form):
-        messages.error(self.request, "لطفاً خطاهای فرم را بررسی کنید.")
-        return super().form_invalid(form)
-
-    def get_success_url(self):
-        return self.course.get_absolute_url()
+    raise Http404("نوع محتوا نامعتبر است.")
 
 
-class UpdateReviewView(LoginRequiredMixin, UpdateView):
-    """Only the review's owner may edit it, and only before approval."""
+@require_POST
+def add_review(request, model_name, object_id):
+    """ثبت نظر برای دوره یا مقاله.
 
-    model = Review
-    form_class = ReviewForm
-    template_name = "reviews/review_form.html"
+    کاربر وارد‌نشده به صفحه‌ی ورود منتقل می‌شود و بعد از ورود به همین بخش
+    از صفحه برمی‌گردد (متن نوشته‌شده‌ی او در سشن نگه داشته می‌شود).
+    """
+    target = _get_target(model_name, object_id)
+    back_url = f"{target.get_absolute_url()}#reviews"
+    form_url = f"{target.get_absolute_url()}#review-form"
 
-    def get_queryset(self):
-        # Scoping to the current user means another user's review 404s
-        # instead of leaking its existence via a 403.
-        return Review.objects.filter(user=self.request.user, is_active=True)
+    if not request.user.is_authenticated:
+        save_draft(request, model_name, object_id, request.POST)
+        return redirect(login_url_with_next(form_url))
 
-    def get_object(self, queryset=None):
-        review = super().get_object(queryset)
-        if review.is_approved:
-            raise PermissionDenied("پس از تایید، امکان ویرایش نظر وجود ندارد.")
-        return review
+    if model_name == "blog" and not target.allow_comments:
+        messages.error(request, "ارسال نظر برای این مقاله غیرفعال است.")
+        return redirect(back_url)
 
-    def form_valid(self, form):
+    content_type = ContentType.objects.get_for_model(target)
+    already_reviewed = Review.objects.filter(
+        user=request.user,
+        content_type=content_type,
+        object_id=target.pk,
+        parent__isnull=True,          # ← اضافه شد
+    ).exists()
+    if already_reviewed:
+        messages.warning(request, "شما قبلاً برای این محتوا نظر ثبت کرده‌اید.")
+        return redirect(back_url)
+
+    # instance از قبل به کاربر و محتوا وصل است تا Review.clean() درست کار کند
+    form = ReviewForm(
+        request.POST,
+        instance=Review(user=request.user, content_object=target, is_approved=False),
+        rating_required=(model_name == "course"),
+    )
+    if not form.is_valid():
+        save_draft(request, model_name, object_id, request.POST)
+        for errors in form.errors.values():
+            for error in errors:
+                messages.error(request, error)
+        return redirect(form_url)
+
+    review = form.save(commit=False)  # is_approved=False: بعد از تایید مدیر نمایش داده می‌شود
+    try:
         with transaction.atomic():
-            response = super().form_valid(form)
-        messages.success(self.request, "نظر شما به‌روزرسانی شد.")
-        return response
+            review.save()
+    except (ValidationError, IntegrityError):
+        messages.warning(request, "شما قبلاً برای این محتوا نظر ثبت کرده‌اید.")
+        return redirect(back_url)
 
-    def form_invalid(self, form):
-        messages.error(self.request, "لطفاً خطاهای فرم را بررسی کنید.")
-        return super().form_invalid(form)
+    messages.success(request, "نظر شما ثبت شد و پس از تایید نمایش داده می‌شود.")
+    return redirect(back_url)
 
-    def get_success_url(self):
-        return self.object.course.get_absolute_url()
+@require_POST
+def add_reply(request, parent_id):
+    """ثبت پاسخ به یک نظر اصلی (تاییدشده). پاسخ بعد از تایید مدیر نمایش داده می‌شود."""
+    parent = get_object_or_404(Review.objects.approved(), pk=parent_id, parent__isnull=True)
+    target = parent.content_object
+    if target is None:
+        raise Http404("محتوا پیدا نشد.")
+    if isinstance(target, Blog) and (
+        target.status != Blog.Status.PUBLISHED or target.published_at > timezone.now()
+    ):
+        raise Http404("محتوا پیدا نشد.")
 
+    page = request.POST.get("page", "")
+    query = f"?page={page}" if page.isdigit() else ""
+    back_url = f"{target.get_absolute_url()}{query}#review-{parent.pk}"
 
-class DeleteReviewView(LoginRequiredMixin, DeleteView):
-    """Soft-delete: only the owner or staff may remove a review."""
+    if not request.user.is_authenticated:
+        save_draft(request, "reply", parent.pk, request.POST)
+        return redirect(login_url_with_next(back_url))
 
-    model = Review
-    template_name = "reviews/review_confirm_delete.html"
+    if isinstance(target, Blog) and not target.allow_comments:
+        messages.error(request, "ارسال نظر برای این مقاله غیرفعال است.")
+        return redirect(back_url)
 
-    def get_queryset(self):
-        qs = Review.objects.filter(is_active=True)
-        if self.request.user.is_staff:
-            return qs
-        return qs.filter(user=self.request.user)
+    form = ReplyForm(
+        request.POST,
+        instance=Review(
+            user=request.user,
+            content_type=parent.content_type,
+            object_id=parent.object_id,
+            parent=parent,
+            is_approved=False,
+        ),
+    )
+    if not form.is_valid():
+        save_draft(request, "reply", parent.pk, request.POST)
+        for errors in form.errors.values():
+            for error in errors:
+                messages.error(request, error)
+        return redirect(back_url)
 
-    def form_valid(self, form):
-        success_url = self.get_success_url()
+    try:
         with transaction.atomic():
-            self.object.is_active = False
-            self.object.save(update_fields=["is_active", "updated_at"])
-        messages.success(self.request, "نظر حذف شد.")
-        return redirect(success_url)
+            form.save()
+    except (ValidationError, IntegrityError):
+        messages.error(request, "ثبت پاسخ انجام نشد. لطفاً دوباره تلاش کنید.")
+        return redirect(back_url)
 
-    def get_success_url(self):
-        return self.object.course.get_absolute_url()
+    messages.success(request, "پاسخ شما ثبت شد و پس از تایید نمایش داده می‌شود.")
+    return redirect(back_url)

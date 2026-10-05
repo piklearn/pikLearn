@@ -99,13 +99,13 @@
     margin-top: 1rem;
     margin-right: 3rem;
     padding-right: 1.25rem;
-    border-right: 2px solid rgba(255, 255, 255, 0.08);
+    border-right: 2px solid var(--border);
 }
 
 .reply-item {
     margin-top: 0.75rem;
     padding: 1rem;
-    background: rgba(255, 255, 255, 0.025);
+    background: var(--surface-2);
     border-radius: 12px;
 }
 
@@ -126,4 +126,182 @@
 .reply-item .review-text {
     font-size: 0.9rem;
     margin-top: 0.75rem;
+}
+
+/* ============================================
+   Review form
+   ============================================ */
+.review-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.review-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-strong);
+    background: var(--surface-2);
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    line-height: 1.8;
+}
+
+.review-alert i {
+    margin-top: 0.25rem;
+    flex-shrink: 0;
+}
+
+.review-alert a {
+    color: var(--primary);
+    font-weight: 600;
+    margin-right: 0.35rem;
+}
+
+.review-alert.success {
+    border-color: rgba(34, 197, 94, 0.45);
+    background: rgba(34, 197, 94, 0.08);
+}
+.review-alert.success i { color: #22c55e; }
+
+.review-alert.error,
+.review-alert.danger {
+    border-color: rgba(239, 68, 68, 0.45);
+    background: rgba(239, 68, 68, 0.08);
+}
+.review-alert.error i,
+.review-alert.danger i { color: #ef4444; }
+
+.review-alert.warning {
+    border-color: rgba(245, 158, 11, 0.45);
+    background: rgba(245, 158, 11, 0.08);
+}
+.review-alert.warning i { color: #f59e0b; }
+
+.review-alert.info i { color: var(--primary); }
+
+.review-form-box {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.review-form-box .review-alert {
+    margin-bottom: 1rem;
+}
+
+.review-form-box .review-alert:last-child {
+    margin-bottom: 0;
+}
+
+.review-form-title {
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 1rem;
+}
+
+.review-form-group {
+    margin-bottom: 1rem;
+}
+
+.review-form .form-label .required {
+    color: #ef4444;
+}
+
+.review-form .form-label .optional {
+    color: var(--text-muted);
+    font-weight: 400;
+    font-size: 0.78rem;
+}
+
+.review-form textarea.form-control {
+    background-color: var(--surface);
+    resize: vertical;
+    min-height: 7rem;
+}
+
+.review-submit {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    padding-inline: 1.5rem;
+}
+
+.review-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Star rating input: first star on the right (RTL), hover/checked fills toward it */
+.star-rating {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    direction: rtl;
+    gap: 0.25rem;
+}
+
+.star-rating input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.star-rating label {
+    cursor: pointer;
+    font-size: 1.6rem;
+    line-height: 1;
+    color: var(--border-strong);
+    transition: color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+}
+
+.star-rating label:hover {
+    transform: scale(1.12);
+}
+
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: #f59e0b;
+}
+
+.star-rating input:focus-visible + label {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+.review-pagination {
+    margin-top: 1.25rem;
+}
+/* Reply form */
+.reply-form {
+    margin-top: 0.6rem;
+    padding-right: 3.4rem;
+}
+
+.reply-form[hidden] {
+    display: none;
+}
+
+.reply-form textarea.form-control {
+    background-color: var(--surface);
+    resize: vertical;
+}
+
+.reply-form-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.review-item:target > .review-header .review-avatar {
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.35);
 }
