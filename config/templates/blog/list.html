@@ -26,8 +26,7 @@
   <h1 class="listing-title">
     {% if current_category %}مقالات <span class="accent">{{ current_category.title }}</span>
     {% elif current_tag %}برچسب <span class="accent">#{{ current_tag.title }}</span>
-    {% elif search_query %}نتایج <span class="accent">«{{ search_query }}»</span>
-    {% else %}وبلاگ <span class="accent">پیک لرن</span>{% endif %}
+    {% elif search_query %}نتایج <span class="accent">«{{ search_query }}»</span>{% endif %}
   </h1>
   <p>{% if current_category.description %}{{ current_category.description }}{% else %}جدیدترین مقالات آموزشی در زمینه برنامه‌نویسی، طراحی و فناوری{% endif %}</p>
 </section>

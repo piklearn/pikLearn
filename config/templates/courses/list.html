@@ -1,5 +1,6 @@
 {% extends "_base.html" %}
 {% load static %}
+{% load currency_tags %}
 
 {% block title %}دوره‌ها{% endblock title %}
 
@@ -176,8 +177,8 @@
                   {% if course.final_price == 0 %}
                     <span class="free">رایگان</span>
                   {% else %}
-                    {% if course.discount_price %}<span class="old">{{ course.price|floatformat:"0g" }}</span>{% endif %}
-                    <span class="now">{{ course.final_price|floatformat:"0g" }} تومان</span>
+                    {% if course.discount_price %}<span class="old">{{ course.price|show_price }}</span>{% endif %}
+                    <span class="now">{{ course.final_price|show_price }}</span>
                   {% endif %}
                 </div>
                 <span class="badge bg-info rounded-pill px-3 py-2">مشاهده</span>
