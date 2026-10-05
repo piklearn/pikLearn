@@ -340,51 +340,8 @@
       <a href="#" class="btn btn-dark">مشاهده همه</a>
     </div>
 
-    <div class="row g-4">
-      {% for course in carousel_courses %}
-      <div class="col-lg-3 col-md-6">
-        <div class="card course-card h-100 p-3">
-          <a href="{{ course.get_absolute_url }}" class="text-decoration-none text-dark">
-            <img src="{{ course.thumbnail.url }}" alt="{{ course.title }}" class="w-100 mb-3 course-img">
-            <h6 class="fw-bold">{{ course.title }}</h6>
-            <div class="d-flex align-items-center justify-content-between mb-2 small">
-              <div class="text-warning fw-semibold">
-                ⭐ 4.8
-              </div>
-              <div class="text-muted">
-                👥 1200 دانشجو
-              </div>
-            </div>
+      {% include "partials/_course_cards.html" with courses=home_courses %}
 
-            <div class="text-muted small mb-2">
-              مدرس: {{ course.instructor }}
-            </div>
-
-            <div class="text-muted small mb-3">
-              مدت زمان: {{ course.duration }}
-            </div>
-
-            <hr>
-
-            <div class="d-flex justify-content-between align-items-center">
-              <div>
-                <span class="price">
-                    {% if course.price == 0 %}
-                            رایگان
-                            {% else %}
-                            {{ course.price|floatformat }} تومان
-                            {% endif %}
-              </div>
-              <span class="badge bg-info rounded-pill px-3 py-2">
-                شروع
-              </span>
-            </div>
-          </a>
-        </div>
-      </div>
-      {% endfor %}
-      
-    </div>
   </div>
 </section>
 

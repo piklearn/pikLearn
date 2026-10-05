@@ -80,6 +80,10 @@
   <!-- Loaded eagerly (no defer) so the saved theme is applied before first paint -->
   <script src="{% static 'js/theme.js' %}"></script>
   <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+
+
+  <!-- LISTING PAGES  (courses list / categories / blog list) -->
+  <link rel="stylesheet" href="{% static 'css/listing.css' %}">
 </head>
 
 <body>
@@ -104,7 +108,7 @@
           aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-
+courses
         <!-- Navigation -->
         <div class="collapse navbar-collapse" id="navbarGlass">
   <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
@@ -126,7 +130,7 @@
           <!-- Right Side Controls -->
           <div class="d-flex align-items-center gap-2 gap-lg-3">
             <!-- Search Toggle (Desktop) - ONLY SHOW ON NON-HOME PAGES -->
-            {% if not carousel_courses %}
+            {% if not home_courses %}
             <button class="glass-icon-btn search-toggle" type="button" aria-label="جستجو" data-bs-toggle="collapse"
               data-bs-target="#searchCollapse" aria-expanded="false">
               <i class="bi bi-search"></i>
@@ -192,7 +196,7 @@
     </nav>
 
     <!-- Search Collapse (Desktop) - ONLY SHOW ON NON-HOME PAGES -->
-    {% if not carousel_courses %}
+    {% if not home_courses %}
     <div class="collapse search-collapse" id="searchCollapse">
       <div class="container-fluid px-3 px-lg-4 py-2">
         <div class="glass-search-wrapper">
@@ -209,7 +213,7 @@
   </header>
 
     {# HERO SEARCH (Homepage) #}
-    {% if carousel_courses %}
+    {% if home_courses %}
       <section class="hero-section" id="heroSection">
         <div class="hero-background">
           <img
