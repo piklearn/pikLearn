@@ -2,146 +2,144 @@
 
 > یک پلتفرم یادگیری و آموزش مدرن
 
-## 📋 فهرست
+**pikLearn** یک سایت آموزشی کامل است که با **Django** ساخته شده و امکان مدیریت دوره‌ها، بلاگ، داشبورد کاربر، نظرات و سیستم ثبت‌نام را فراهم می‌کند.
 
-- [درباره پروژه](#درباره-پروژه)
-- [ویژگی‌ها](#ویژگی‌ها)
-- [نیازمندی‌ها](#نیازمندی‌ها)
-- [نصب و راه‌اندازی](#نصب-و-راه‌اندازی)
-- [استفاده](#استفاده)
-- [ساختار پروژه](#ساختار-پروژه)
-- [مشارکت](#مشارکت)
-- [لایسنس](#لایسنس)
-- [تماس](#تماس)
+---
 
-## درباره پروژه
+## ✨ ویژگی‌ها
 
-**pikLearn** یک سایت آموزشی شخصی است که به طور خصوصی ساخته شده و هنوز در حال توسعه و پیکربندی می‌باشد. این پروژه با ترکیب Python در سمت backend و HTML/CSS در سمت frontend، یک پلتفرم آموزشی کاملی را فراهم می‌آورد.
+- رابط کاربری مدرن با طراحی Glassmorphism
+- سیستم احراز هویت (ثبت‌نام و ورود)
+- داشبورد اختصاصی کاربر (دوره‌های من، لیست علاقه‌مندی، سفارش‌ها، پروفایل)
+- سیستم مدیریت دوره‌ها با امتیاز، تعداد دانشجو و قیمت
+- بلاگ با دسته‌بندی، تگ و قابلیت پاسخ به نظرات
+- پشتیبانی از اعداد فارسی و تاریخ جلالی
+- سیستم اعلان‌ها (Notifications)
+- پنل مدیریت قدرتمند
+- طراحی واکنش‌پذیر (Responsive)
 
-👨‍💻 **سازنده:** pky
+---
 
-⚠️ **وضعیت:** این پروژه در حال توسعه و پیکربندی می‌باشد
+## 🛠 تکنولوژی‌ها
 
-## ویژگی‌ها
+- **Backend:** Django
+- **Frontend:** HTML, CSS, JavaScript, Bootstrap
+- **Database:** SQLite (قابل تغییر به PostgreSQL)
+- **سایر:** Django Template Tags, Custom Filters
 
-- ✨ رابط کاربری ساده و جذاب
-- 🚀 عملکرد بالا و سریع
-- 📱 طراحی واکنش‌پذیر
-- 🔒 امنیت بالا
-- 🎯 سهولت استفاده
-- ⚙️ قابل پیکربندی
+---
 
-## نیازمندی‌ها
+## 📋 نیازمندی‌ها
 
-برای اجرای این پروژه به موارد زیر نیاز دارید:
+- Python 3.10+
+- pip
+- Git
 
-- **Python 3.7+**
-- **pip** (مدیر بسته‌های Python)
-- **Git**
+---
 
-### وابستگی‌های Python
+## 🚀 نصب و راه‌اندازی
 
-بسته‌های مورد نیاز در فایل `requirements.txt` مشخص شده‌اند.
-
-## نصب و راه‌اندازی
-
-### 1. کلون کردن مخزن
+### ۱. کلون کردن پروژه
 
 ```bash
-git clone https://github.com/piklearn/pikLearn.git
+git clone https://github.com/Piklearn/pikLearn.git
 cd pikLearn
 ```
 
-### 2. ایجاد محیط مجازی (اختیاری اما توصیه شده)
+### ۲. ساخت محیط مجازی
 
 ```bash
 python -m venv venv
 
-# در Windows
+# Windows
 venv\Scripts\activate
 
-# در macOS/Linux
+# macOS / Linux
 source venv/bin/activate
 ```
 
-### 3. نصب وابستگی‌ها
+### ۳. نصب وابستگی‌ها
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. پیکربندی
-
-فایل کانفیگ را در پوشه `config/` بررسی و نیاز سنجی کنید.
-
-### 5. اجرای برنامه
+### ۴. اعمال مایگریشن‌ها
 
 ```bash
-python app.py
+python config/manage.py migrate
 ```
 
-برنامه در آدرس `http://localhost:5000` اجرا خواهد شد.
-
-## استفاده
-
-### راه‌اندازی سریع
+### ۵. بارگذاری داده‌های اولیه (اختیاری)
 
 ```bash
-# فقط کافی است:
-python app.py
+python config/manage.py load_test_data
 ```
 
-سپس مرورگر خود را باز کنید و به آدرس زیر بروید:
-```
-http://localhost:5000
-```
+### ۶. ساخت کاربر ادمین
 
-## ساختار پروژه
-
-```
-pikLearn/
-├── config/              # فایل‌های پیکربندی
-├── .github/
-│   └── workflows/       # GitHub Actions workflows
-├── .vscode/             # تنظیمات VS Code
-├── requirements.txt     # وابستگی‌های Python
-├── app.py              # فایل اصلی برنامه
-├── README.md           # این فایل
-└── ...
+```bash
+python config/manage.py createsuperuser
 ```
 
-## مشارکت
+### ۷. اجرای پروژه
 
-ما از مشارکت‌های شما استقبال می‌کنیم! برای مشارکت در این پروژه:
+```bash
+python config/manage.py runserver
+```
 
-1. **Fork** کنید
-2. یک **branch** جدید ایجاد کنید (`git checkout -b feature/amazing-feature`)
-3. تغییرات خود را **commit** کنید (`git commit -m 'Add amazing feature'`)
-4. **push** کنید (`git push origin feature/amazing-feature`)
-5. یک **Pull Request** ایجاد کنید
+سپس به آدرس زیر بروید:
 
-### دستورالعمل‌های توسعه
-
-- کد خود را پاکیزه و قابل فهم نویسید
-- از convention و سبک کد موجود پیروی کنید
-- قبل از ارسال PR، تست‌ها را اجرا کنید
-
-## لایسنس
-
-این پروژه تحت لایسنس [MIT](LICENSE) منتشر شده است.
-
-## تماس
-
-برای پرسش‌ها یا مشکلات:
-
-- 📧 ایمیل: [pkyanpwr@gmail.com](mailto:pkyanpwr@gmail.com)
-- 🐛 مسائل: [Issues](https://github.com/piklearn/pikLearn/issues)
-- 💬 Discussions: [مناقشات](https://github.com/piklearn/pikLearn/discussions)
+```
+http://127.0.0.1:8000
+```
 
 ---
 
-<div dir="rtl">
+## 📁 ساختار پروژه
 
-**ساخته شده با ❤️ توسط pky**
+```
+pikLearn/
+├── config/                  # تنظیمات اصلی پروژه
+│   ├── settings/            # تنظیمات Django
+│   ├── courses/             # اپلیکیشن دوره‌ها
+│   ├── blog/                # اپلیکیشن بلاگ
+│   ├── accounts/            # مدیریت کاربران
+│   ├── templates/           # قالب‌های HTML
+│   └── static/              # فایل‌های CSS و JS
+├── requirements.txt
+└── README.md
+```
 
-</div>
+---
+
+## 📸 اسکرین‌شات‌ها
+
+> در این قسمت اسکرین‌شات‌های صفحه اصلی، داشبورد و صفحه دوره را قرار دهید.
+
+---
+
+## 🤝 مشارکت
+
+1. پروژه را Fork کنید
+2. یک Branch جدید بسازید (`git checkout -b feature/amazing-feature`)
+3. تغییرات را Commit کنید (`git commit -m 'Add amazing feature'`)
+4. به Branch خود Push کنید (`git push origin feature/amazing-feature`)
+5. یک Pull Request باز کنید
+
+---
+
+## 📄 لایسنس
+
+این پروژه تحت لایسنس **MIT** منتشر شده است.
+
+---
+
+## 📬 تماس
+
+- **ایمیل:** pkyanpwr@gmail.com
+- **GitHub:** [github.com/Piklearn](https://github.com/Piklearn)
+
+---
+
+ساخته شده با ❤️ توسط **pky**
