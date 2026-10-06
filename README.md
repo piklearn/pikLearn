@@ -4,6 +4,8 @@
 
 **pikLearn** یک سایت آموزشی کامل است که با **Django** ساخته شده و امکان مدیریت دوره‌ها، بلاگ، داشبورد کاربر، نظرات و سیستم ثبت‌نام را فراهم می‌کند.
 
+🔗 **دمو زنده:** [http://piklearn.ir:8081](http://piklearn.ir:8081)
+
 ---
 
 ## ✨ ویژگی‌ها
@@ -107,6 +109,8 @@ pikLearn/
 │   ├── accounts/            # مدیریت کاربران
 │   ├── templates/           # قالب‌های HTML
 │   └── static/              # فایل‌های CSS و JS
+├── docs/
+│   └── screenshots/         # اسکرین‌شات‌های پروژه
 ├── requirements.txt
 └── README.md
 ```
@@ -115,7 +119,23 @@ pikLearn/
 
 ## 📸 اسکرین‌شات‌ها
 
-> در این قسمت اسکرین‌شات‌های صفحه اصلی، داشبورد و صفحه دوره را قرار دهید.
+### صفحه اصلی
+![صفحه اصلی](docs/screenshots/home.png)
+
+### لیست دوره‌ها
+![لیست دوره‌ها](docs/screenshots/courses.png)
+
+### جزئیات دوره
+![جزئیات دوره](docs/screenshots/course_detail.png)
+
+### داشبورد کاربر
+![داشبورد](docs/screenshots/dashboard.png)
+
+### لیست مقالات
+![لیست مقالات](docs/screenshots/blogs.png)
+
+### جزئیات مقاله
+![جزئیات مقاله](docs/screenshots/blog_detail.png)
 
 ---
 
@@ -139,6 +159,7 @@ pikLearn/
 
 - **ایمیل:** pkyanpwr@gmail.com
 - **GitHub:** [github.com/Piklearn](https://github.com/Piklearn)
+- **دمو:** [piklearn.ir:8081](http://piklearn.ir:8081)
 
 ---
 
