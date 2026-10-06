@@ -118,25 +118,25 @@ pikLearn/
 ---
 
 ## 📸 اسکرین‌شات‌ها
+## 📸 اسکرین‌شات‌ها
 
 ### صفحه اصلی
-![صفحه اصلی](docs/screenshots/home.png)
+![صفحه اصلی](https://raw.githubusercontent.com/piklearn/pikLearn/main/docs/screenshots/home.png)
 
 ### لیست دوره‌ها
-![لیست دوره‌ها](docs/screenshots/courses.png)
+![لیست دوره‌ها](https://raw.githubusercontent.com/piklearn/pikLearn/main/docs/screenshots/courses.png)
 
 ### جزئیات دوره
-![جزئیات دوره](docs/screenshots/course_detail.png)
+![جزئیات دوره](https://raw.githubusercontent.com/piklearn/pikLearn/main/docs/screenshots/course_detail.png)
 
 ### داشبورد کاربر
-![داشبورد](docs/screenshots/dashboard.png)
+![داشبورد](https://raw.githubusercontent.com/piklearn/pikLearn/main/docs/screenshots/dashboard.png)
 
 ### لیست مقالات
-![لیست مقالات](docs/screenshots/blogs.png)
+![لیست مقالات](https://raw.githubusercontent.com/piklearn/pikLearn/main/docs/screenshots/blogs.png)
 
 ### جزئیات مقاله
-![جزئیات مقاله](docs/screenshots/blog_detail.png)
-
+![جزئیات مقاله](https://raw.githubusercontent.com/piklearn/pikLearn/main/docs/screenshots/blog_detail.png)
 ---
 
 ## 🤝 مشارکت
