@@ -7,3 +7,4 @@ media/
 staticfiles/
 .venv/
 venv/
+.env
