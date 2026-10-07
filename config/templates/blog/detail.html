@@ -88,7 +88,17 @@
 
       <!-- ===== LEFT: Article ===== -->
       <article class="col-lg-8">
-
+        {% if toc_html %}
+          <div class="blog-toc-card">
+            <h5 class="section-title">
+              <i class="bi bi-list-nested"></i>
+              فهرست مطالب
+            </h5>
+            <div class="blog-toc-body">
+              {{ toc_html }}
+            </div>
+          </div>
+        {% endif %}
         <!-- Featured Image -->
         {% if blog.image %}
           <div class="blog-featured-image">
@@ -135,6 +145,46 @@
             <i class="bi bi-link-45deg"></i> کپی لینک
           </button>
         </div>
+
+        {% if series %}
+          <section class="blog-series-section">
+            <h5 class="section-title">
+              <i class="bi bi-collection-fill"></i>
+              سری: {{ series.title }}
+            </h5>
+
+            <ul class="series-posts-list">
+              {% for post in series_posts %}
+                <li class="series-post-item {% if post.pk == blog.pk %}active{% endif %}">
+                  {% if post.pk == blog.pk %}
+                    <span class="series-num">{{ forloop.counter }}</span>
+                    <strong>{{ post.title }}</strong>
+                  {% else %}
+                    <a href="{{ post.get_absolute_url }}">
+                      <span class="series-num">{{ forloop.counter }}</span>
+                      {{ post.title }}
+                    </a>
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+
+            <div class="series-nav">
+              {% if prev_in_series %}
+                <a href="{{ prev_in_series.get_absolute_url }}" class="series-nav-btn">
+                  <i class="bi bi-arrow-right"></i>
+                  قبلی: {{ prev_in_series.title|truncatechars:40 }}
+                </a>
+              {% endif %}
+              {% if next_in_series %}
+                <a href="{{ next_in_series.get_absolute_url }}" class="series-nav-btn next">
+                  بعدی: {{ next_in_series.title|truncatechars:40 }}
+                  <i class="bi bi-arrow-left"></i>
+                </a>
+              {% endif %}
+            </div>
+          </section>
+        {% endif %}
 
         <!-- Related Posts (Consistent with Related Courses) -->
         {% if related_blogs %}
@@ -296,6 +346,18 @@
 
     window.addEventListener('scroll', updateReadingProgress);
   }
+
+  // اسکرول نرم
+  document.querySelectorAll('.blog-toc-body a').forEach(function (link) {
+  link.addEventListener('click', function (e) {
+    const id = this.getAttribute('href');
+    const target = document.querySelector(id);
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
 </script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>

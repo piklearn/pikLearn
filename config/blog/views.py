@@ -8,6 +8,7 @@ from reviews.utils import build_review_context
 from .models import Blog, Category, Tag
 import markdown
 from django.utils.safestring import mark_safe
+from markdown.extensions.toc import TocExtension
 
 PAGE_SIZE = 9
 
@@ -181,7 +182,6 @@ class TagBlogListView(PublishedBlogQuerysetMixin, ListView):
         context["meta_description"] = f"مقالات مرتبط با برچسب {self.tag.title}"
         context["canonical_url"] = self.request.build_absolute_uri(self.tag.get_absolute_url())
         return context
-
 class BlogDetailView(PublishedBlogQuerysetMixin, DetailView):
     model = Blog
     template_name = "blog/detail.html"
@@ -203,26 +203,46 @@ class BlogDetailView(PublishedBlogQuerysetMixin, DetailView):
         context = super().get_context_data(**kwargs)
         blog = self.object
 
-        # رندر Markdown به HTML
-        context["content_html"] = mark_safe(
-            markdown.markdown(
-                blog.content,
-                extensions=[
-                    "extra",          # جداول، لیست‌ها و ...
-                    "fenced_code",    # بلاک‌های کد با ``` 
-                    "codehilite",     # هایلایت کد (نیاز به pygments داره)
-                    "toc",            # فهرست مطالب
-                    "tables",
-                    "nl2br",
-                ],
-                extension_configs={
-                    "codehilite": {
-                        "linenums": False,
-                        "css_class": "highlight",
-                    }
+        # رندر Markdown به HTML + فهرست مطالب
+        md = markdown.Markdown(
+            extensions=[
+                "extra",
+                "fenced_code",
+                "codehilite",
+                "tables",
+                "nl2br",
+                TocExtension(toc_depth=3, permalink=False),
+            ],
+            extension_configs={
+                "codehilite": {
+                    "linenums": False,
+                    "css_class": "highlight",
                 }
-            )
+            },
         )
+        content_html = md.convert(blog.content)
+        toc_html = md.toc
+
+        context["content_html"] = mark_safe(content_html)
+        context["toc_html"] = mark_safe(toc_html) if toc_html and toc_html.strip() else None
+
+        # سری مقالات
+        if blog.series:
+            series_posts = list(
+                blog.series.posts.filter(status=Blog.Status.PUBLISHED)
+                .order_by("series_order", "published_at")
+            )
+            context["series"] = blog.series
+            context["series_posts"] = series_posts
+            try:
+                idx = series_posts.index(blog)
+                context["prev_in_series"] = series_posts[idx - 1] if idx > 0 else None
+                context["next_in_series"] = (
+                    series_posts[idx + 1] if idx < len(series_posts) - 1 else None
+                )
+            except ValueError:
+                context["prev_in_series"] = None
+                context["next_in_series"] = None
 
         context.update(build_review_context(self.request, blog))
 

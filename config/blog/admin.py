@@ -1,8 +1,14 @@
 from django.contrib import admin
 from django.utils import timezone
 
-from .models import Blog, Category, Tag
+from .models import Blog, Category, Tag, Series
 
+@admin.register(Series)
+class SeriesAdmin(admin.ModelAdmin):
+    list_display = ("title", "slug", "created_at")
+    prepopulated_fields = {"slug": ("title",)}  # یا خالی بذار تا خودت slug بسازی
+    search_fields = ("title",)
+    readonly_fields = ("created_at",)
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -21,17 +27,11 @@ class TagAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
     readonly_fields = ("created_at",)
 
+
+
 @admin.register(Blog)
 class BlogAdmin(admin.ModelAdmin):
-    list_display = (
-        "title",
-        "author",
-        "category",
-        "status",
-        "is_featured",
-        "view_count",
-        "published_at",
-    )
+
     list_filter = ("status", "is_featured", "allow_comments", "category", "created_at")
     search_fields = ("title", "short_description", "content", "author__username")
     autocomplete_fields = ("author", "category", "tags")
@@ -41,13 +41,43 @@ class BlogAdmin(admin.ModelAdmin):
     list_select_related = ("author", "category")
     actions = ("publish_posts", "unpublish_posts", "mark_featured", "unmark_featured")
 
-    fieldsets = (
-        ("محتوا", {"fields": ("author", "category", "title", "slug", "short_description", "content", "image", "tags")}),
-        ("انتشار", {"fields": ("status", "published_at", "is_featured", "allow_comments")}),
-        ("سئو", {"fields": ("seo_title", "seo_description")}),
-        ("آمار", {"fields": ("view_count", "created_at", "updated_at")}),
+    list_display = (
+        "title",
+        "author",
+        "category",
+        "series",
+        "series_order",
+        "status",
+        "published_at",
+        "view_count",
     )
-
+    fieldsets = (
+        (None, {
+            "fields": (
+                "title",
+                "slug",
+                "author",
+                "category",
+                "short_description",
+                "content",
+                "image",
+            )
+        }),
+        ("سری مقالات", {
+            "fields": ("series", "series_order"),
+            "description": "اگر این مقاله بخشی از یک سری است، سری و ترتیب آن را مشخص کنید.",
+        }),
+        ("وضعیت و انتشار", {
+            "fields": ("status", "published_at", "is_featured", "allow_comments"),
+        }),
+        ("برچسب‌ها و سئو", {
+            "fields": ("tags", "seo_title", "seo_description"),
+        }),
+        ("آمار", {
+            "fields": ("view_count",),
+        }),
+    )
+    
     def get_queryset(self, request):
         return (
             super()
@@ -81,8 +111,3 @@ class BlogAdmin(admin.ModelAdmin):
     def unmark_featured(self, request, queryset):
         updated = queryset.update(is_featured=False)
         self.message_user(request, f"{updated} مقاله از حالت ویژه خارج شد.")
-
-    class Media:
-        css = {
-            'all': ('css/mdeditor_rtl.css',)
-        }

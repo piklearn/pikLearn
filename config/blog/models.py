@@ -62,6 +62,25 @@ class Tag(models.Model):
     def get_absolute_url(self):
         return reverse("blog:tag", kwargs={"slug": self.slug})
 
+class Series(models.Model):
+    title = models.CharField(max_length=200, verbose_name="عنوان سری")
+    slug = models.SlugField(max_length=220, unique=True, blank=True, allow_unicode=True)
+    description = models.TextField(blank=True, verbose_name="توضیحات")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "سری مقالات"
+        verbose_name_plural = "سری‌های مقالات"
+        ordering = ["title"]
+
+    def __str__(self):
+        return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = generate_unique_slug(self, self.title)
+        super().save(*args, **kwargs)
+
 
 class Blog(models.Model):
     class Status(models.TextChoices):
@@ -98,7 +117,19 @@ class Blog(models.Model):
     seo_description = models.CharField(max_length=160, blank=True, verbose_name="توضیحات سئو")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ایجاد")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="تاریخ به‌روزرسانی")
-
+    series = models.ForeignKey(
+        Series,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="posts",
+        verbose_name="سری مقالات",
+    )
+    series_order = models.PositiveIntegerField(
+        default=0,
+        verbose_name="ترتیب در سری",
+    )
+    series_order = models.PositiveIntegerField(default=0, verbose_name="ترتیب در سری")
     class Meta:
         ordering = ["-published_at", "-created_at"]
         verbose_name = "مقاله"
@@ -162,4 +193,3 @@ class Blog(models.Model):
     def reading_time_minutes(self):
         words = len(self.content.split())
         return max(1, round(words / 200))
-
