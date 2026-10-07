@@ -5,8 +5,9 @@ from django.utils import timezone
 from django.views.generic import DetailView, ListView
 
 from reviews.utils import build_review_context
-
 from .models import Blog, Category, Tag
+import markdown
+from django.utils.safestring import mark_safe
 
 PAGE_SIZE = 9
 
@@ -181,7 +182,6 @@ class TagBlogListView(PublishedBlogQuerysetMixin, ListView):
         context["canonical_url"] = self.request.build_absolute_uri(self.tag.get_absolute_url())
         return context
 
-
 class BlogDetailView(PublishedBlogQuerysetMixin, DetailView):
     model = Blog
     template_name = "blog/detail.html"
@@ -194,7 +194,7 @@ class BlogDetailView(PublishedBlogQuerysetMixin, DetailView):
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset)
-        # Atomic increment avoids a race condition between concurrent readers.
+        # Atomic increment
         Blog.objects.filter(pk=obj.pk).update(view_count=F("view_count") + 1)
         obj.refresh_from_db(fields=["view_count"])
         return obj
@@ -202,6 +202,27 @@ class BlogDetailView(PublishedBlogQuerysetMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         blog = self.object
+
+        # رندر Markdown به HTML
+        context["content_html"] = mark_safe(
+            markdown.markdown(
+                blog.content,
+                extensions=[
+                    "extra",          # جداول، لیست‌ها و ...
+                    "fenced_code",    # بلاک‌های کد با ``` 
+                    "codehilite",     # هایلایت کد (نیاز به pygments داره)
+                    "toc",            # فهرست مطالب
+                    "tables",
+                    "nl2br",
+                ],
+                extension_configs={
+                    "codehilite": {
+                        "linenums": False,
+                        "css_class": "highlight",
+                    }
+                }
+            )
+        )
 
         context.update(build_review_context(self.request, blog))
 

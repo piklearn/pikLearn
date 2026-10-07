@@ -30,8 +30,10 @@ urlpatterns = [
     path('reviews/', include(('reviews.urls', 'reviews'), namespace='reviews')),
     path('blog/', include(('blog.urls', 'blog'), namespace='blog'),),
     path('dashboard/', include(('dashboard.urls', 'dashboard'), namespace='dashboard'),),
-
+    path('mdeditor/', include('mdeditor.urls')),
+    
     path('<slug:slug>/', page_views.page_detail, name='page_detail'),
+    
 
 ] 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

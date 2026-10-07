@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'crispy_forms',
     "crispy_bootstrap5",
+    'mdeditor',
 ]
 
 MIDDLEWARE = [
@@ -128,6 +129,36 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+MDEDITOR_CONFIGS = {
+    'default': {
+        'width': '100%',
+        'height': 550,
+        'toolbar': [
+            "undo", "redo", "|",
+            "bold", "del", "italic", "quote", "|",
+            "h1", "h2", "h3", "h4", "h5", "h6", "|",
+            "list-ul", "list-ol", "hr", "|",
+            "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table",
+            "datetime", "emoji", "|",
+            "||", "preview", "watch", "fullscreen"
+        ],
+        'upload_image_formats': ["jpg", "jpeg", "gif", "png", "webp"],
+        'image_folder': 'editor',
+        'theme': 'default',
+        'preview_theme': 'default',
+        'editor_theme': 'default',
+        'toolbar_autofixed': True,
+        'search_replace': True,
+        'emoji': True,
+        'tex': False,
+        'flow_chart': False,
+        'sequence': False,
+        'watch': True,
+        'lineWrapping': True,
+        'lineNumbers': True,
+        'language': 'en',
+    }
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
@@ -170,3 +201,5 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'

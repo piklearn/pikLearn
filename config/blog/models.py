@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from .utils import generate_unique_slug
-
+from mdeditor.fields import MDTextField
 
 class Category(models.Model):
     title = models.CharField(max_length=120, verbose_name="عنوان")
@@ -84,7 +84,7 @@ class Blog(models.Model):
     title = models.CharField(max_length=220, verbose_name="عنوان")
     slug = models.SlugField(max_length=240, unique=True, blank=True, allow_unicode=True, verbose_name="نامک")
     short_description = models.CharField(max_length=300, verbose_name="توضیح کوتاه")
-    content = models.TextField(verbose_name="محتوا")
+    content = MDTextField(verbose_name="محتوا")
     image = models.ImageField(upload_to="blog/posts/%Y/%m/", verbose_name="تصویر شاخص")
     status = models.CharField(
         max_length=10, choices=Status.choices, default=Status.DRAFT, verbose_name="وضعیت"

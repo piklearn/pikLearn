@@ -81,3 +81,8 @@ class BlogAdmin(admin.ModelAdmin):
     def unmark_featured(self, request, queryset):
         updated = queryset.update(is_featured=False)
         self.message_user(request, f"{updated} مقاله از حالت ویژه خارج شد.")
+
+    class Media:
+        css = {
+            'all': ('css/mdeditor_rtl.css',)
+        }
